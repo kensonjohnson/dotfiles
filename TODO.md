@@ -5,3 +5,5 @@
 - Add iTerm2
 - Enable True Color
 - Create automation script to install on fresh os
+- Setup script to use homebrew zsh as default
+- Define the policy for writing scripts
