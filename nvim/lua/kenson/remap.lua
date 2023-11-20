@@ -4,6 +4,7 @@
 
 --- Set leader key
 vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 --- Write buffer to file
 vim.keymap.set('n', '<leader>w', ':w<CR>')
