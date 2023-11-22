@@ -7,3 +7,4 @@
 - Create automation script to install on fresh os
 - Setup script to use homebrew zsh as default
 - Define the policy for writing scripts
+- NeoVim: Add key shortcuts for fuzzy finder (telescope.nvim)
