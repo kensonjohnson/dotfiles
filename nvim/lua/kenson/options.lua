@@ -37,3 +37,4 @@ vim.opt.undofile = true
 
 --- Use Truecolor 24-bit colors in terminal
 vim.opt.termguicolors = true
+vim.opt.background = 'dark'
