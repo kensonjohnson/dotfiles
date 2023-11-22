@@ -36,5 +36,13 @@ require("lazy").setup({
   'tpope/vim-sleuth',
 
   --- Compile all of the configurations in the plugins directory.
----  { import = "plugins" }
+  { import = "plugins" }
 })
+
+----------------------------------------------------------------------
+---- Configure Plugins -----------------------------------------------
+----------------------------------------------------------------------
+
+-- require("kensonjohnson.colors")
+-- require("kensonjohnson.coding")
+
