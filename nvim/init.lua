@@ -46,6 +46,6 @@ require("lazy").setup({
 ---- Configure Plugins -----------------------------------------------
 ----------------------------------------------------------------------
 
--- require("kensonjohnson.colors")
--- require("kensonjohnson.coding")
+require("kenson.colors")
+-- require("kenson.coding")
 

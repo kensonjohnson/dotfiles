@@ -4,10 +4,6 @@ return {
     name = "moonfly",
     lazy = false,
     priority = 1000,
-    config = function()
-      -- load the colorscheme
-      vim.cmd [[colorscheme moonfly]]
-    end,
   },
   { 
     "ellisonleao/gruvbox.nvim",
