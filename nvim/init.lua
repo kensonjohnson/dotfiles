@@ -40,7 +40,7 @@ require("lazy").setup({
 
   --- Compile all of the configurations in the plugins directory.
   { import = "plugins" }
-},{})
+}, {})
 
 ----------------------------------------------------------------------
 ---- Configure Plugins -----------------------------------------------
