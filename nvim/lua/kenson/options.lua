@@ -35,3 +35,23 @@ vim.opt.makeprg = 'clang++'
 --- Use persistent undo
 vim.opt.undofile = true
 
+--- Decrease update time
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 250
+
+--- Better completion experience
+vim.opt.completeopt = 'menuone,noselect'
+
+--- signcolumn by default
+vim.opt.signcolumn = 'yes'
+
+--- Highlight on yank
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = '*',
+})
+
