@@ -47,6 +47,6 @@ require("lazy").setup({
 ----------------------------------------------------------------------
 
 require("kenson.colors")
--- require("kenson.coding")
 require("kenson.telescope")
 require("kenson.treesitter")
+require("kenson.lsp")
