@@ -73,6 +73,12 @@ local servers = {
   rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs' } },
+  cssls = {},
+  emmet_ls = {},
+  jsonls = {},
+  yamlls = {},
+  marksman = {}, --- markdown
+  bashls = {},
 
   lua_ls = {
     Lua = {
@@ -80,6 +86,7 @@ local servers = {
       telemetry = { enable = false },
     },
   },
+
 }
 
 -- Setup neovim lua configuration
