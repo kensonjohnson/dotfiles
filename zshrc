@@ -1,5 +1,7 @@
-# printf '\33c\e[3J'
 #--- Set Variables ----------#
+export NULLCMD=bat
+export DOTFILES="$HOME/.dotfiles"
+export HOMEBREW_BUNDLE_FILE="$DOTFILES/Brewfile"
 
 #--- Change ZSH Options ----------#
 
@@ -11,8 +13,11 @@ autoload -Uz compinit && compinit
 alias vim="nvim"
 alias vi="nvim"
 alias ls="eza"
-alias la="eza -la"
+alias la="eza -la -git"
 alias cat="bat"
+alias rm=trash
+alias man=batman
+alias pbat=prettybat
 
 #--- Customize Prompts ----------#
 # Set Prompt to show current directory in Bright Yellow
