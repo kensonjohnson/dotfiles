@@ -45,6 +45,9 @@ vim.opt.completeopt = 'menuone,noselect'
 --- signcolumn by default
 vim.opt.signcolumn = 'yes'
 
+--- Add column at 80 characters
+vim.opt.colorcolumn = '80'
+
 --- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -54,4 +57,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = highlight_group,
   pattern = '*',
 })
-
