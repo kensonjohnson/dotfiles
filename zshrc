@@ -13,11 +13,12 @@ autoload -Uz compinit && compinit
 alias vim="nvim"
 alias vi="nvim"
 alias ls="eza"
-alias la="eza -la -git"
+alias la="eza -la --git"
 alias cat="bat"
 alias rm=trash
 alias man=batman
 alias pbat=prettybat
+alias nrd="npm run dev"
 
 #--- Customize Prompts ----------#
 # Set Prompt to show current directory in Bright Yellow
