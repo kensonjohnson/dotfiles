@@ -65,7 +65,7 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 
 --- Attemp to format current buffer
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format current buffer" })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -84,10 +84,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>mm', vim.cmd.make, { desc = 'Run [m]ake' })
 vim.keymap.set('n', '<leader>mM', '<cmd>make % -o %<.exe<CR>', { desc = 'Run [M]ake on current file' })
 vim.keymap.set('n', '<leader>mR', '<cmd>!%<.exe<CR>', { desc = '[R]un current file' })
-vim.keymap.set('n', '<leader>mE', '<cmd>make % -o %<.exe && %<.exe<CR>', { desc = 'Run [M]ake on current file and [E]xecute' })
+vim.keymap.set('n', '<leader>mE', '<cmd>make % -o %<.exe && %<.exe<CR>',
+  { desc = 'Run [M]ake on current file and [E]xecute' })
 vim.keymap.set('n', '<leader>mc', '<cmd>make clean<CR>', { desc = '[m]ake [c]lean' })
 vim.keymap.set('n', '<leader>mr', '<cmd>make run<CR>', { desc = 'Run [m]ake [r]un' })
 vim.keymap.set('n', '<leader>mb', '<cmd>make build<CR>', { desc = 'Run [m]ake [b]uild' })
 vim.keymap.set('n', '<leader>mt', '<cmd>make test<CR>', { desc = 'Run [m]ake [t]est' })
 vim.keymap.set('n', '<leader>md', '<cmd>make debug<CR>', { desc = 'Run [m]ake [d]ebug' })
-
