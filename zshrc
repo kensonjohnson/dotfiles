@@ -47,6 +47,30 @@ settitle ()
   echo -ne "\033]0;"$*"\007"
 }
 
+prune()
+{
+current_branch=$(git symbolic-ref --short HEAD)
+if [ $current_branch != "main" ] && [ $current_branch != "master" ]; then
+  echo "\x1b[31mYou must be on \x1b[38;2;255;153;51mmaster\x1b[31m or \x1b[38;2;255;153;51mmain\x1b[31m to prune branches\x1b[0m."
+  return 1
+fi
+
+git fetch origin &>/dev/null
+git fetch --prune &>/dev/null
+
+for branch in $(git branch --format="%(refname:short)"); do
+  # if branch is merged into current branch
+  if [ $branch != "master" ] && [ $branch != "main" ]; then
+    # if branch is not in remote
+    if ! git branch -r | grep --quiet $branch; then
+      # delete local branch
+      echo "\x1b[92m$(git branch -d $branch)\x1b[0m"
+    fi
+  fi
+done
+return 0
+}
+
 #--- Load ZSH Plugins ----------#
 # Setup ZSH syntax highlighting
 source /Users/kenson/.zsh-packages/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
