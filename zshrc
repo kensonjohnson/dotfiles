@@ -1,14 +1,21 @@
-#--- Set Variables ----------#
+#-------------------------------#
+#--- Set Variables -------------#
+#-------------------------------#
+
 export NULLCMD=bat
 export DOTFILES="$HOME/.dotfiles"
 export HOMEBREW_BUNDLE_FILE="$DOTFILES/Brewfile"
 
-#--- Change ZSH Options ----------#
+#-------------------------------#
+#--- Change ZSH Options --------#
+#-------------------------------#
 
 # Setup Git autocompletion
 autoload -Uz compinit && compinit
 
-#--- Customize Aliases ----------#
+#-------------------------------#
+#--- Customize Aliases ---------#
+#-------------------------------#
 
 alias vim="nvim"
 alias vi="nvim"
@@ -20,7 +27,16 @@ alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
 
-#--- Customize Prompts ----------#
+#-------------------------------#
+#--- Customize Hotkeys ---------#
+#-------------------------------#
+
+bindkey -s ^f "tmux_sessionizer\n"
+
+#-------------------------------#
+#--- Customize Prompts ---------#
+#-------------------------------#
+
 # Set Prompt to show current directory in Bright Yellow
 PROMPT='%B%F{130}┌─[%3~]
 └[]%f%b '
@@ -31,22 +47,27 @@ RPROMPT='%B%F{130}[%f%b%(?.%F{green}√.%F{red}?%?)%f%B%F{130}]%f%b'
 # Set Cursor to Blinking Vertical Bar
 echo -e -n "\x1b[\x35 q"
 
-#--- $PATH Modifications ----------#
+#-------------------------------#
+#--- $PATH Modifications -------#
+#-------------------------------#
 
-#--- Functions ----------#
+#-------------------------------#
+#--- Functions -----------------#
+#-------------------------------#
 
-# Make and change to directory
+### Make and Change to Direcory ###
 mkcd ()
 {
  mkdir -p "$@" && cd "$_"; 
 }
 
-# Set Terminal Title
+### Set Terminal Title ###
 settitle ()
 {
   echo -ne "\033]0;"$*"\007"
 }
 
+### Cleanup Git Branches ###
 prune()
 {
 current_branch=$(git symbolic-ref --short HEAD)
@@ -71,7 +92,43 @@ done
 return 0
 }
 
+### TMUX Sessionizer ###
+tmux_sessionizer()
+{
+  session=$(find ~ ~/Developer/repos -type d -mindepth 1 -maxdepth 1 | fzf)
+
+session_name=$(basename $session | tr . _)
+tmux_running=$(pgrep tmux)
+
+# If not in tmux, and no tmux session is running, start a new session
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    tmux new-session -s $session_name -c $session
+    return 0 
+fi
+
+# If not in tmux, but a tmux session is running, attach to a session
+# with session name if it exists, otherwise start a new session
+if [[ -z $TMUX ]] && [[ -n $tmux_running ]]; then
+    if tmux has-session -t $session_name 2>/dev/null; then
+        tmux attach-session -t $session_name
+    else
+        tmux new-session -s $session_name -c $session
+    fi
+    return 0
+fi
+
+# If in tmux, but no session with session name is running, start a new session
+if ! tmux has-session -t $session_name 2>/dev/null; then
+    tmux new-session -d -s $session_name -c $session
+fi
+
+tmux switch-client -t $session_name
+}
+
+#-------------------------------#
 #--- Load ZSH Plugins ----------#
-# Setup ZSH syntax highlighting
+#-------------------------------#
+
+### Setup ZSH syntax highlighting ###
 source /Users/kenson/.zsh-packages/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
