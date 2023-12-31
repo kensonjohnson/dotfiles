@@ -91,3 +91,7 @@ vim.keymap.set('n', '<leader>mr', '<cmd>make run<CR>', { desc = 'Run [m]ake [r]u
 vim.keymap.set('n', '<leader>mb', '<cmd>make build<CR>', { desc = 'Run [m]ake [b]uild' })
 vim.keymap.set('n', '<leader>mt', '<cmd>make test<CR>', { desc = 'Run [m]ake [t]est' })
 vim.keymap.set('n', '<leader>md', '<cmd>make debug<CR>', { desc = 'Run [m]ake [d]ebug' })
+
+--- Tmux Sessionizer
+vim.keymap.set('n', '<C-f>', '<cmd>!tmux neww tmux_sessionizer<CR>',
+  { silent = true, desc = '[F]ind and open directory in tmux' })
