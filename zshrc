@@ -26,6 +26,8 @@ alias rm=trash
 alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
+alias c=code
+alias c.="code ."
 
 #-------------------------------#
 #--- Customize Hotkeys ---------#
@@ -50,6 +52,9 @@ echo -e -n "\x1b[\x35 q"
 #-------------------------------#
 #--- $PATH Modifications -------#
 #-------------------------------#
+
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 #-------------------------------#
 #--- Functions -----------------#
@@ -96,6 +101,8 @@ return 0
 #--- Load ZSH Plugins ----------#
 #-------------------------------#
 
-### Setup ZSH syntax highlighting ###
+# Setup ZSH syntax highlighting 
 source /Users/kenson/.zsh-packages/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Setup fzf for zsh
+source <(fzf --zsh)
