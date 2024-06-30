@@ -42,3 +42,4 @@ fi
 
 tmux switch-client -t $session_name
 }
+. "$HOME/.cargo/env"
