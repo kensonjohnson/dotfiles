@@ -55,6 +55,7 @@ echo -e -n "\x1b[\x35 q"
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+export PATH=${PATH}:$(go env GOBIN)
 
 #-------------------------------#
 #--- Functions -----------------#

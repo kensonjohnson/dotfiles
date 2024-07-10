@@ -1,4 +1,5 @@
 export HOMEBREW_CASK_OPTS="--no-quarantine --no-binaries"
+export GOPATH="$HOME/Developer/go/"
 
 function exists() {
   # `command -v` is similar to `which`
