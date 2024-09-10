@@ -103,7 +103,7 @@ return 0
 #-------------------------------#
 
 # Setup ZSH syntax highlighting 
-source /Users/kenson/.zsh-packages/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Setup fzf for zsh
 source <(fzf --zsh)
