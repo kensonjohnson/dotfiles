@@ -3,8 +3,8 @@
 ----------------------------------------------------------------------
 
 --- Remaps must come before plugins or the wrong leader key is used.
-require("kenson.remap")
-require("kenson.options")
+require("user.remap")
+require("user.options")
 
 ----------------------------------------------------------------------
 ---- Bootstrap & Run Plugin Manager ----------------------------------
@@ -46,8 +46,8 @@ require("lazy").setup({
 ---- Configure Plugins -----------------------------------------------
 ----------------------------------------------------------------------
 
-require("kenson.colors")
-require("kenson.telescope")
-require("kenson.treesitter")
-require("kenson.lsp")
-require("kenson.nvim-cmp")
+require("user.colors")
+require("user.telescope")
+require("user.treesitter")
+require("user.lsp")
+require("user.nvim-cmp")
