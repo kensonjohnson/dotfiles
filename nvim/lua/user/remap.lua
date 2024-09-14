@@ -41,6 +41,7 @@ vim.keymap.set('n', '<leader>ps', vim.cmd.Sex)
 
 --- Clear search highlighting
 vim.keymap.set('n', '<leader>cs', vim.cmd.nohls)
+vim.keymap.set('n', '<Esc>', vim.cmd.nohls)
 
 --- Paste without replacing buffer in VISUAL mode
 vim.keymap.set('x', '<leader>p', [["_dP]])

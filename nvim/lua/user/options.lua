@@ -2,6 +2,9 @@
 ---- Editor Configurations -------------------------------------------
 ----------------------------------------------------------------------
 
+--- Set globals before plugins run
+vim.g.have_nerd_font = true
+
 --- Add relative line numbers
 vim.opt.number = true
 vim.opt.relativenumber = true

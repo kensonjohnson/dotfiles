@@ -14,3 +14,4 @@ vim.opt.background = 'dark'
 -- vim.g.termcolors = 256
 -- vim.cmd.colorscheme('gruvbox')
 
+require('mini.icons').setup()
