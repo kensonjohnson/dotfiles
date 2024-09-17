@@ -28,15 +28,14 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   --- This spot is good for plugins that don't require configuration.
 
-  --- Git plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
-
   --- Detect tabstop and shiftwidth automagically.
   'tpope/vim-sleuth',
 
   --- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',  opts = {} },
+
+  --- Automagically create closing brackets
+  { 'm4xshen/autoclose.nvim', opts = {} },
 
   --- Compile all of the configurations in the plugins directory.
   { import = "plugins" }
