@@ -7,6 +7,11 @@ return {
   },
   config = function()
     require("nvim-tree").setup({
+      actions = {
+        open_file = {
+          quit_on_open = true,
+        },
+      },
       vim.api.nvim_set_keymap("n", "<leader>et", ":NvimTreeToggle<enter>", { desc = "[E]xplorer [t]oggle" }),
       vim.keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>",
         { desc = "Toggle file explorer on current file" }),
