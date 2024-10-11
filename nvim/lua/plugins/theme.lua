@@ -9,5 +9,9 @@ return {
     "ellisonleao/gruvbox.nvim",
     lazy = true,
     config = true,
+  },
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = true,
   }
 }
