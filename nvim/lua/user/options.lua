@@ -51,6 +51,10 @@ vim.opt.signcolumn = 'yes'
 --- Add column at 80 characters
 vim.opt.colorcolumn = '80'
 
+--- Open splits on the bottom
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
 --- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
