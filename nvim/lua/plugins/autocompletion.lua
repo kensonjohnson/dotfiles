@@ -1,18 +1,50 @@
-return { {
-  -- Autocompletion engines
-  'hrsh7th/nvim-cmp',
-  dependencies = {
-    -- Snippet Engine & its associated nvim-cmp source
-    'L3MON4D3/LuaSnip',
-    'saadparwaiz1/cmp_luasnip',
+return {
+  {
+    "L3MON4D3/LuaSnip",
+    config = function()
+      local luasnip = require("luasnip")
+      luasnip.config.setup {
+        history = true,
+        updateevents = "TextChanged,TextChangedI",
+        enable_autosnippets = true,
+      }
 
-    -- Adds LSP completion capabilities
-    'hrsh7th/cmp-nvim-lsp',
+      --- custom keymaps
+      vim.keymap.set({ "i", "s" }, "<c-k>", function()
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        end
+      end, { silent = true, desc = "Jump forward in current snippet" })
+      vim.keymap.set({ "i", "s" }, "<c-j>", function()
+        if luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        end
+      end, { silent = true, desc = "Jump backwards in current snippet" })
+      vim.keymap.set("i", "<c-l>", function()
+        if luasnip.choice_active() then
+          luasnip.change_choice(1)
+        end
+      end, { desc = "Iterate through snippet options" })
+      vim.keymap.set("n", "<leader>ss", "<cmd>source ~/.config/nvim/lua/user/snippets.lua<CR>",
+        { desc = "Reload (source) snippets file" })
+    end,
 
-    -- Adds a number of user-friendly snippets
-    'rafamadriz/friendly-snippets',
   },
-},
+  {
+    -- Autocompletion engines
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
+  },
   -- Useful plugin to show you pending keybinds.
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
