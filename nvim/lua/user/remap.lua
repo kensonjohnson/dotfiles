@@ -31,10 +31,7 @@ vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
---- Shoutout vim/nvim config file
-vim.keymap.set('n', '<leader><CR>', ':so $MYVIMRC<CR>')
-
---- Open file explorer
+--- Open netrw file explorer
 vim.keymap.set("n", "<leader>pe", vim.cmd.Ex)
 vim.keymap.set('n', '<leader>pv', vim.cmd.Vex)
 vim.keymap.set('n', '<leader>ps', vim.cmd.Sex)
@@ -72,6 +69,9 @@ vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format current bu
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+--- Create new line while in insert mode
+vim.keymap.set('i', '/n', '<C-o>o', { desc = 'Create new line under current line' })
+
 --- Helps with accidently trying a keymap in the wrong mode
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
@@ -80,6 +80,22 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous dia
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+--- Helpful window navigation commands (from kickstart)
+vim.keymap.set('n', '<Left>', '<C-w>h', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<Right>', '<C-w>l', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<Down>', '<C-w>j', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<Up>', '<C-w>k', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<C-Left>', '<C-w><', { desc = 'Decrease the width of the current window' })
+vim.keymap.set('n', '<C-Right>', '<C-w>>', { desc = 'Increase the width of the current window' })
+vim.keymap.set('n', '<C-Down>', '<C-w>-', { desc = 'Decrease the height of the current window' })
+vim.keymap.set('n', '<C-Left>', '<C-w>+', { desc = 'Increase the height of the current window' })
+
+--- Create interactive terminals
+vim.keymap.set("n", "<leader>t", "<cmd>terminal<CR>i", { desc = "Open [t]erminal in current window" })
+vim.keymap.set("n", "<leader>ts", "<cmd>split | terminal<CR>i", { desc = "Open [t]erminal in a [s]plit window" })
+vim.keymap.set("n", "<leader>tv", "<cmd>vsplit | terminal<CR>i",
+  { desc = "Open [t]erminal in a [v]ertical split window" })
 
 --- :make keymaps
 vim.keymap.set('n', '<leader>mm', vim.cmd.make, { desc = 'Run [m]ake' })
@@ -94,10 +110,6 @@ vim.keymap.set('n', '<leader>mt', '<cmd>make test<CR>', { desc = 'Run [m]ake [t]
 vim.keymap.set('n', '<leader>md', '<cmd>make debug<CR>', { desc = 'Run [m]ake [d]ebug' })
 
 --- :!just keymaps
-vim.keymap.set('n', '<leader>jr', '<cmd>!just run<CR>', { desc = '[j]ust [r]un' })
-vim.keymap.set('n', '<leader>jd', '<cmd>!just dev<CR>', { desc = '[j]ust [d]ev' })
+vim.keymap.set('n', '<leader>jr', '<cmd>split | terminal just run<CR>i', { desc = '[j]ust [r]un' })
+vim.keymap.set('n', '<leader>jd', '<cmd>split | terminal just dev<CR>i', { desc = '[j]ust [d]ev' })
 vim.keymap.set('n', '<leader>jl', '<cmd>!just list<CR>', { desc = '[j]ust [l]ist' })
-
---- Tmux Sessionizer
-vim.keymap.set('n', '<C-f>', '<cmd>!tmux neww tmux_sessionizer<CR>',
-  { silent = true, desc = '[F]ind and open directory in tmux' })
