@@ -68,6 +68,7 @@ local servers = {
   yamlls = {},
   marksman = {}, --- markdown
   bashls = {},
+  tailwindcss = {},
 
   lua_ls = {
     Lua = {
