@@ -36,7 +36,6 @@ alias c.="code ."
 #--- Customize Hotkeys ---------#
 #-------------------------------#
 
-bindkey -s ^f "tmux_sessionizer\n"
 
 #-------------------------------#
 #--- Customize Prompts ---------#
@@ -65,7 +64,7 @@ export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
 #--- Functions -----------------#
 #-------------------------------#
 
-### Make and Change to Direcory ###
+### Make and Change to Directory ###
 mkcd ()
 {
  mkdir -p "$@" && cd "$_"; 
