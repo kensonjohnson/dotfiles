@@ -52,11 +52,15 @@ vim.opt.colorcolumn = "80"
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
--- Enable mouse mode, useful for resizing splits
+--- Enable mouse mode, useful for re-sizing splits
 vim.opt.mouse = "a"
 
--- Don't show the mode, since it's already in the status line
+--- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
+
+--- Enable spellchecker
+vim.opt.spelllang = "en_us"
+vim.opt.spell = true
 
 --- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
