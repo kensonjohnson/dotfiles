@@ -37,7 +37,7 @@ vim.opt.undofile = true
 
 --- Decrease update time
 vim.opt.updatetime = 250
-vim.opt.timeoutlen = 250
+vim.opt.timeoutlen = 300
 
 --- Better completion experience
 vim.opt.completeopt = "menuone,noselect"
@@ -51,6 +51,12 @@ vim.opt.colorcolumn = "80"
 --- Open splits on the bottom
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+
+-- Enable mouse mode, useful for resizing splits
+vim.opt.mouse = "a"
+
+-- Don't show the mode, since it's already in the status line
+vim.opt.showmode = false
 
 --- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
