@@ -1,17 +1,7 @@
 return {
-  {
-    "bluz71/vim-moonfly-colors",
-    name = "moonfly",
-    lazy = false,
-    priority = 1000,
-  },
-  {
-    "ellisonleao/gruvbox.nvim",
-    lazy = true,
-    config = true,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    lazy = true,
-  }
+	"rebelot/kanagawa.nvim",
+	priority = 1000,
+	init = function()
+		vim.cmd.colorscheme("kanagawa-dragon")
+	end,
 }
