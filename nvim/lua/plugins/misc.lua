@@ -1,16 +1,28 @@
 return {
 	--- Detect tabstop and shiftwidth automagically
-	"tpope/vim-sleuth",
+	{
+		"tpope/vim-sleuth",
+		event = "VeryLazy",
+	},
 
 	--- <leader>gc to comment visually selected regions
-	{ "numToStr/Comment.nvim", opts = {} },
+	{
+		"numToStr/Comment.nvim",
+		event = "VeryLazy",
+		opts = {},
+	},
 
 	--- Create closing brackets automagically
-	{ "m4xshen/autoclose.nvim", opts = {} },
+	{
+		"m4xshen/autoclose.nvim",
+		event = "VeryLazy",
+		opts = {},
+	},
 
 	--- Allow the use of <ESC> to leave built-in terminal
 	{
 		"sychen52/smart-term-esc.nvim",
+		event = "VeryLazy",
 		config = function()
 			require("smart-term-esc").setup({
 				key = "<Esc>",
@@ -29,6 +41,7 @@ return {
 	--- Add indentation guides even on blank lines
 	{
 		"lukas-reineke/indent-blankline.nvim",
+		event = "VeryLazy",
 		main = "ibl",
 		opts = {},
 	},
@@ -36,7 +49,7 @@ return {
 	--- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
-		event = "VimEnter",
+		event = "VeryLazy",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
