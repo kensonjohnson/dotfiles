@@ -6,7 +6,7 @@
 vim.opt.termguicolors = true
 
 --- Turn on syntax for any theme
-vim.opt.syntax = 'on'
+vim.opt.syntax = "on"
 
 --- Add relative line numbers
 vim.opt.number = true
@@ -40,24 +40,24 @@ vim.opt.updatetime = 250
 vim.opt.timeoutlen = 250
 
 --- Better completion experience
-vim.opt.completeopt = 'menuone,noselect'
+vim.opt.completeopt = "menuone,noselect"
 
 --- signcolumn by default
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 --- Add column at 80 characters
-vim.opt.colorcolumn = '80'
+vim.opt.colorcolumn = "80"
 
 --- Open splits on the bottom
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 
 --- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
 })

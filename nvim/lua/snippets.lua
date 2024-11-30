@@ -25,8 +25,8 @@ local rep = require("luasnip.extras").rep
 ----------------------------------------------------------------------
 
 luasnip.add_snippets("lua", {
-  luasnip.parser.parse_snippet("lf", "local $1 = function($2)\n  $0\nend"),
-  snippet("req", format("local {} = require('{}')", { insert(1, "default"), rep(1) })),
+	luasnip.parser.parse_snippet("lf", "local $1 = function($2)\n  $0\nend"),
+	snippet("req", format("local {} = require('{}')", { insert(1, "default"), rep(1) })),
 })
 
 ----------------------------------------------------------------------
@@ -34,6 +34,5 @@ luasnip.add_snippets("lua", {
 ----------------------------------------------------------------------
 
 luasnip.add_snippets("go", {
-  snippet("ien", format("if err != nil {{\n\t{}\n}}", { insert(1) }))
+	snippet("ien", format("if err != nil {{\n\t{}\n}}", { insert(1) })),
 })
-
