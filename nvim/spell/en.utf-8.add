@@ -40,3 +40,14 @@ Brewfile
 Neovim's
 signcolumn
 24-bit
+gui
+png
+txt
+md
+middleware
+userId
+Quickfix
+keymaps
+keymap
+Configs
+globals

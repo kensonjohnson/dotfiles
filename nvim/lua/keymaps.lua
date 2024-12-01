@@ -59,7 +59,7 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 --- Create new line while in insert mode
 vim.keymap.set("i", "/n", "<C-o>o", { desc = "Create new line under current line" })
 
---- Helps with accidently trying a keymap in the wrong mode
+--- Helps with accidentally trying a keymap in the wrong mode
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 --- Helpful window navigation commands
@@ -73,12 +73,12 @@ vim.keymap.set("n", "<C-Down>", "<C-w>-", { desc = "Decrease the height of the c
 vim.keymap.set("n", "<C-Left>", "<C-w>+", { desc = "Increase the height of the current window" })
 
 --- Create interactive terminals
-vim.keymap.set("n", "<leader>t", "<cmd>terminal<CR>i", { desc = "Open [t]erminal in current window" })
-vim.keymap.set("n", "<leader>ts", "<cmd>split | terminal<CR>i", { desc = "Open [t]erminal in a [s]plit window" })
+vim.keymap.set("n", "<leader>t", "<cmd>terminal<CR>", { desc = "Open [t]erminal in current window" })
+vim.keymap.set("n", "<leader>ts", "<cmd>split | terminal<CR>", { desc = "Open [t]erminal in a [s]plit window" })
 vim.keymap.set(
 	"n",
 	"<leader>tv",
-	"<cmd>vsplit | terminal<CR>i",
+	"<cmd>vsplit | terminal<CR>",
 	{ desc = "Open [t]erminal in a [v]ertical split window" }
 )
 
