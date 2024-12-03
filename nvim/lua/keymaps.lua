@@ -70,7 +70,7 @@ vim.keymap.set("n", "<Up>", "<C-w>k", { desc = "Move focus to the upper window" 
 vim.keymap.set("n", "<C-Left>", "<C-w><", { desc = "Decrease the width of the current window" })
 vim.keymap.set("n", "<C-Right>", "<C-w>>", { desc = "Increase the width of the current window" })
 vim.keymap.set("n", "<C-Down>", "<C-w>-", { desc = "Decrease the height of the current window" })
-vim.keymap.set("n", "<C-Left>", "<C-w>+", { desc = "Increase the height of the current window" })
+vim.keymap.set("n", "<C-Up>", "<C-w>+", { desc = "Increase the height of the current window" })
 
 --- Create interactive terminals
 vim.keymap.set("n", "<leader>t", "<cmd>terminal<CR>", { desc = "Open [t]erminal in current window" })
@@ -83,6 +83,5 @@ vim.keymap.set(
 )
 
 --- :!just keymaps
-vim.keymap.set("n", "<leader>jr", "<cmd>split | terminal just run<CR>i", { desc = "[j]ust [r]un" })
-vim.keymap.set("n", "<leader>jd", "<cmd>split | terminal just dev<CR>i", { desc = "[j]ust [d]ev" })
-vim.keymap.set("n", "<leader>jl", "<cmd>!just list<CR>", { desc = "[j]ust [l]ist" })
+vim.keymap.set("n", "<leader>jr", "<cmd>split | terminal just run<CR>", { desc = "[j]ust [r]un" })
+vim.keymap.set("n", "<leader>jd", "<cmd>split | terminal just dev<CR>", { desc = "[j]ust [d]ev" })
