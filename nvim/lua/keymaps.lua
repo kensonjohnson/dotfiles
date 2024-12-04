@@ -56,9 +56,6 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
---- Create new line while in insert mode
-vim.keymap.set("i", "/n", "<C-o>o", { desc = "Create new line under current line" })
-
 --- Helps with accidentally trying a keymap in the wrong mode
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
