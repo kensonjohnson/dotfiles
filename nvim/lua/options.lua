@@ -61,3 +61,6 @@ vim.opt.showmode = false
 --- Enable spellchecker
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
+
+--- Disable inline diagnostics
+vim.diagnostic.config({ virtual_text = false })

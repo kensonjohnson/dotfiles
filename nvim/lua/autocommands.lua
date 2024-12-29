@@ -23,3 +23,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = buf_check,
 	pattern = "*",
 })
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+	pattern = "*.gohtml,*.gotmpl,*.html,*tmpl",
+	callback = function()
+		if vim.fn.search("{{.\\+}}", "nw") ~= 0 then
+			local buf = vim.api.nvim_get_current_buf()
+			vim.api.nvim_buf_set_option(buf, "filetype", "gotmpl")
+			vim.api.nvim_buf_set_option(buf, "filetype", "html")
+		end
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })

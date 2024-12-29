@@ -21,6 +21,7 @@ vim.g.loaded_netrwPlugin = 1
 require("options")
 require("autocommands")
 require("keymaps")
+require("filetypes")
 
 ----------------------------------------------------------------------
 ---- Bootstrap & Run Plugin Manager ----------------------------------
