@@ -10,3 +10,4 @@ ln -s ~/.dotfiles/zshenv ~/.zshenv
 # TODO: Add check for .ssh directory, mkdir if not present
 ln -s ~/.dotfiles/ssh/config ~/.ssh/config
 ln -s ~/.dotfiles/nvim ~/.config/nvim
+ln -s ~/.dotfiles/ghostty ~/.config/ghostty

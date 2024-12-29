@@ -23,6 +23,7 @@ return {
 				"javascript",
 				"typescript",
 				"sql",
+				"templ",
 			},
 			auto_install = true,
 			highlight = {

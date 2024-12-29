@@ -49,6 +49,7 @@ return {
 				json = { "prettierd", "prettier", stop_after_first = true },
 				yaml = { "prettierd", "prettier", stop_after_first = true },
 				sql = { "pg_format" },
+				templ = { "templ" },
 			},
 		},
 	},
