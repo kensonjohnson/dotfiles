@@ -29,8 +29,6 @@ alias rm=trash
 alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
-alias c=code
-alias c.="code ."
 
 #-------------------------------#
 #--- Customize Hotkeys ---------#
