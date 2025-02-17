@@ -11,6 +11,11 @@ return {
 	},
 	{ "Bilal2453/luvit-meta", lazy = true },
 	{
+		"seblj/roslyn.nvim",
+		ft = "cs",
+		opts = {},
+	},
+	{
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
 		event = "VeryLazy",
@@ -117,16 +122,16 @@ return {
 				bashls = {},
 				templ = {},
 				tailwindcss = {
-					filetypes = { "templ", "javascript", "typescript", "react" },
+					filetypes = { "templ", "javascript", "typescript", "javascriptreact", "typescriptreact", "gohtml" },
 					settings = {
 						tailwindCSS = {
 							includeLanguages = {
 								templ = "html",
+								gohtml = "html",
 							},
 						},
 					},
 				},
-
 				lua_ls = {
 					settings = {
 						Lua = {
