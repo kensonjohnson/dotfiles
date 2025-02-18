@@ -88,3 +88,9 @@ vim.keymap.set(
 --- :!just keymaps
 vim.keymap.set("n", "<leader>jr", "<cmd>split | terminal just run<CR>", { desc = "[j]ust [r]un" })
 vim.keymap.set("n", "<leader>jd", "<cmd>split | terminal just dev<CR>", { desc = "[j]ust [d]ev" })
+
+-- Twilight
+vim.keymap.set("n", "<leader>tw", ":Twilight<enter>", { desc = "Toggle [TW]ilight" })
+
+-- ZenMode
+vim.keymap.set("n", "<leader>zm", ":ZenMode<enter>", { desc = "Toggle [Z]en[Mode]" })
