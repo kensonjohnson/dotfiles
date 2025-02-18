@@ -64,3 +64,6 @@ vim.opt.spell = true
 
 --- Disable inline diagnostics
 vim.diagnostic.config({ virtual_text = false })
+
+--- Conceal formatting characters
+vim.opt.conceallevel = 2
