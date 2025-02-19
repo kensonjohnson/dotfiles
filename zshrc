@@ -19,16 +19,19 @@ autoload -Uz compinit && compinit
 #--- Customize Aliases ---------#
 #-------------------------------#
 
-alias vim="nvim"
-alias vi="nvim"
+alias vim=nvim
+alias vi=nvim
 alias v.="nvim ."
-alias ls="eza"
+alias v="nvim ."
+alias ls=eza
 alias la="eza -la --git"
-alias cat="bat"
+alias cat=bat
 alias rm=trash
 alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
+alias lzd=lazydocker
+alias brew_dump="brew bundle dump --force"
 
 #-------------------------------#
 #--- Customize Hotkeys ---------#
@@ -40,7 +43,7 @@ alias nrd="npm run dev"
 #-------------------------------#
 
 # Set Prompt to show current directory in Bright Yellow
-PROMPT='%B%F{130}┌─[%3~]
+PROMPT='%B%F{130}┌─[%5~]
 └[$]%f%b '
 
 # Set Right Prompt to show last command status
