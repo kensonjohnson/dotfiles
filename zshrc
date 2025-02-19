@@ -31,6 +31,7 @@ alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
 alias lzd=lazydocker
+alias brew_dump="brew bundle dump --force"
 
 #-------------------------------#
 #--- Customize Hotkeys ---------#
