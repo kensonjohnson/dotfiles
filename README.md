@@ -44,7 +44,7 @@ sudo /Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabi
 Then you should navigate to ` > System Settings > Privacy & Security > Input Monitoring`, and click the `+` icon to try to add Kanata to the list.
 This part is a bit tricky because the file picker doesn't make it easy to find homebrew's bin directory.
 The easiest way I have found is to navigate via terminal and open finder from there.
-While, leaving the picker to add a new program where it is, open a terminal window and run the following:
+While leaving the picker for adding a new program where it is, open a terminal window and run the following:
 
 ```sh
 open /opt/homebrew/bin/ 
