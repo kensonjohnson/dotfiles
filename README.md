@@ -10,6 +10,7 @@ This is a dotfiles setup for MacOS.
 
 - [Setup a SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) and [link it in Github](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 - [Homebrew](https://brew.sh/)
+- [Karabiner-DriverKit-VirtualHIDDevice](https://github.com/pqrs-org/Karabiner-DriverKit-VirtualHIDDevice/releases)
 
 ### Steps
 
@@ -31,7 +32,35 @@ brew bundle install --file=~/.dotfiles/Brewfile
 zsh ~/.dotfiles/setupEnv.zsh
 ```
 
-4. (Optional) Make this repo your own:
+### Setup Kanata
+Unfortunately, MacOS makes it a little complicated to setup Kanata.
+First, you should have [Karabiner-DriverKit-VirtualHIDDevice](https://github.com/pqrs-org/Karabiner-DriverKit-VirtualHIDDevice/releases) installed and activated.
+After installing the driver, you can activate it with:
+
+```sh
+sudo /Applications/.Karabiner-VirtualHIDDevice-Manager.app/Contents/MacOS/Karabiner-VirtualHIDDevice-Manager activate
+```
+
+Then you should navigate to ` > System Settings > Privacy & Security > Input Monitoring`, and click the `+` icon to try to add Kanata to the list.
+This part is a bit tricky because the file picker doesn't make it easy to find homebrew's bin directory.
+The easiest way I have found is to navigate via terminal and open finder from there.
+While, leaving the picker to add a new program where it is, open a terminal window and run the following:
+
+```sh
+open /opt/homebrew/bin/ 
+```
+
+In the resulting finder window, locate Kanata and drag it over to the 'Add Program' picker from before.
+This should add Kanata to the list, and make sure it is toggled on.
+Restart the service (or just restart your computer) and Kanata should be good to go.
+If the `D` and `K` keys aren't working as `Shift` keys, then something is wrong.
+You can check the error logs for Kanata and debug from there with this command:
+
+```sh
+sudo tail -f /Library/Logs/Kanata/kanata.err.log
+```
+
+### Make this repo your own (Optional)
 ```sh
 # Change into the project directory
 cd ~/.dotfiles/
@@ -60,7 +89,7 @@ Tips for updating your config:
 
 - Make a feature branch, do your work, and merge it back into `main` when you're done
 - Try to keep concepts in their own directories, e.g. `nvim` for Neovim's config
-- Remember to update the `setupEnv.zsh` as if you had to link a new config file
+- Remember to update the `setupEnv.zsh` to create a symbolic link to any new config directory
 - Remember to update your `brewfile` if you add any new programs
 
 ### Updating the Brewfile
