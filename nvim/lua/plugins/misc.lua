@@ -55,4 +55,17 @@ return {
 		},
 		opts = { signs = false },
 	},
+
+	--- Fix tailwindcss class ordering for templ files
+	{
+		"laytan/tailwind-sorter.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-lua/plenary.nvim" },
+		build = "cd formatter && npm ci && npm run build",
+		config = {
+			on_save_enabled = true,
+			on_save_pattern = { "*.templ" }, -- The file patterns to watch and sort.
+			node_path = "node",
+			trim_spaces = true,
+		},
+	},
 }

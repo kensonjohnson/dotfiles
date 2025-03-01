@@ -30,14 +30,14 @@ return {
 		open_app_foreground = true,
 		mappings = {
 			-- Follow markdown/wiki links
-			["<leader>of"] = {
+			["gd"] = {
 				action = function()
 					return require("obsidian").util.gf_passthrough()
 				end,
 				opts = { noremap = false, expr = true, buffer = true },
 			},
 			-- Toggle check-boxes "Obsidian done"
-			["<leader>od"] = {
+			["<leader>d"] = {
 				action = function()
 					return require("obsidian").util.toggle_checkbox()
 				end,
