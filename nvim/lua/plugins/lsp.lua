@@ -122,7 +122,15 @@ return {
 				bashls = {},
 				templ = {},
 				tailwindcss = {
-					filetypes = { "templ", "javascript", "typescript", "javascriptreact", "typescriptreact", "gohtml" },
+					filetypes = {
+						"html",
+						"templ",
+						"javascript",
+						"typescript",
+						"javascriptreact",
+						"typescriptreact",
+						"gohtml",
+					},
 					settings = {
 						tailwindCSS = {
 							includeLanguages = {
