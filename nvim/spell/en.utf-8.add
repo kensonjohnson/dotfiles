@@ -73,3 +73,7 @@ CDN
 itunes
 gohtml
 Ebiten
+WebSocket
+localhost
+idempotence
+enqueue

@@ -102,9 +102,14 @@ kanata-start()
   sudo launchctl load /Library/LaunchDaemons/com.example.kanata.plist
 }
 
-kanata-down()
+kanata-stop()
 {
   sudo launchctl unload /Library/LaunchDaemons/com.example.kanata.plist
+}
+
+stop-docker()
+{
+  docker stop $(docker ps -a -q)
 }
 
 #-------------------------------#

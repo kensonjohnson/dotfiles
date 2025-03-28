@@ -67,8 +67,8 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 			original(msg, level, opts)
 		end
 
+		vim.lsp.buf.format()
 		vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
 		vim.lsp.buf.code_action({ context = { only = { "source.fixAll" } }, apply = true })
-		vim.lsp.buf.format()
 	end,
 })
