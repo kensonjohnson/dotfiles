@@ -8,7 +8,6 @@ vim.keymap.set("n", "<leader>w", ":w<CR>")
 --- Escape INSERT mode
 vim.keymap.set("i", "jj", "<esc>")
 vim.keymap.set("i", "jk", "<esc>")
-vim.keymap.set("i", "kk", "<esc>")
 
 --- Append line while keeping cursor at column 0
 vim.keymap.set("n", "J", "mzJ`z")
