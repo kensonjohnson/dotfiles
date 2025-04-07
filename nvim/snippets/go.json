@@ -1,0 +1,7 @@
+{
+  "if err != nil": {
+    "prefix": "ien",
+    "body": ["if err != nil {", "\t$1", "}"],
+    "description": "if err != nil snippet"
+  }
+}
