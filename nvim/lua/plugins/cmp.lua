@@ -16,8 +16,6 @@ return {
 				},
 				completion = {
 					documentation = { auto_show = false },
-					ghost_text = { enabled = true },
-					trigger = { prefetch_on_insert = false },
 				},
 				sources = {
 					default = { "lsp", "path", "snippets", "buffer", "minuet" },

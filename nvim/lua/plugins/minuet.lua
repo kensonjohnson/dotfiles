@@ -1,37 +1,35 @@
 return {
 	"milanglacier/minuet-ai.nvim",
-	opts = {
-		virtualtext = {
-			auto_trigger_ft = {},
-			keymap = {
-				-- accept whole completion
-				accept = "<A-A>",
-				-- accept one line
-				accept_line = "<A-a>",
-				-- accept n lines (prompts for number)
-				-- e.g. "A-z 2 CR" will accept 2 lines
-				accept_n_lines = "<A-z>",
-				-- Cycle to prev completion item, or manually invoke completion
-				prev = "<A-[>",
-				-- Cycle to next completion item, or manually invoke completion
-				next = "<A-]>",
-				dismiss = "<A-e>",
+	config = function()
+		require("minuet").setup({
+			blink = {
+				enable_auto_complete = false,
 			},
-		},
-		provider = "openai_fim_compatible",
-		n_completions = 1, -- recommend for local model for resource saving
-		context_window = 512,
-		provider_options = {
-			openai_fim_compatible = {
-				api_key = "TERM",
-				name = "Ollama",
-				end_point = "http://localhost:11434/v1/completions",
-				model = "qwen2.5-coder:7b",
-				optional = {
-					max_tokens = 56,
-					top_p = 0.9,
+			lsp = {
+				disabled_auto_trigger_ft = { "*" },
+			},
+			provider = "openai_fim_compatible",
+			n_completions = 3, -- recommend for local model for resource saving
+			provider_options = {
+				openai_fim_compatible = {
+					api_key = "TERM",
+					name = "Ollama",
+					end_point = "http://localhost:11434/v1/completions",
+					model = "qwen2.5-coder:7b",
+					optional = {
+						max_tokens = 56,
+						top_p = 0.9,
+					},
 				},
 			},
-		},
-	},
+		})
+		vim.keymap.set("n", "<M-s>", "<Cmd>Minuet blink toggle<CR>")
+		local virtualtext = require("minuet.virtualtext")
+		vim.keymap.set("i", "<M-A>", virtualtext.action.accept)
+		vim.keymap.set("i", "<M-a>", virtualtext.action.accept_line)
+		vim.keymap.set("i", "<M-z>", virtualtext.action.accept_n_lines)
+		vim.keymap.set("i", "<M-[>", virtualtext.action.prev)
+		vim.keymap.set("i", "<M-]>", virtualtext.action.next)
+		vim.keymap.set("i", "<M-e>", virtualtext.action.dismiss)
+	end,
 }
