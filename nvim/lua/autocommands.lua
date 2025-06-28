@@ -39,14 +39,20 @@ vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
 local templ_format = function()
 	local bufnr = vim.api.nvim_get_current_buf()
 	local filename = vim.api.nvim_buf_get_name(bufnr)
-	local cmd = "templ fmt " .. vim.fn.shellescape(filename)
+	local templ_cmd = "templ fmt " .. vim.fn.shellescape(filename)
 
-	vim.fn.jobstart(cmd, {
+	vim.fn.jobstart(templ_cmd, {
 		on_exit = function()
-			-- Reload the buffer only if it's still the current buffer
-			if vim.api.nvim_get_current_buf() == bufnr then
-				vim.cmd("e!")
-			end
+			-- Run rustywind after templ fmt completes
+			local rustywind_cmd = "rustywind --write " .. vim.fn.shellescape(filename)
+			vim.fn.jobstart(rustywind_cmd, {
+				on_exit = function()
+					-- Reload the buffer only if it's still the current buffer
+					if vim.api.nvim_get_current_buf() == bufnr then
+						vim.cmd("e!")
+					end
+				end,
+			})
 		end,
 	})
 end
@@ -56,7 +62,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callba
 -- Organize Golang imports on save
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = { "*.go" },
-	callback = function(args)
+	callback = function()
 		-- Disable 'No code actions available' message on write
 		local original = vim.notify
 		---@diagnostic disable-next-line: duplicate-set-field
@@ -68,7 +74,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		end
 
 		vim.lsp.buf.format()
-		vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
-		vim.lsp.buf.code_action({ context = { only = { "source.fixAll" } }, apply = true })
+		vim.lsp.buf.code_action({ context = { diagnostics = {}, only = { "source.organizeImports" } }, apply = true })
+		vim.lsp.buf.code_action({ context = { diagnostics = {}, only = { "source.fixAll" } }, apply = true })
 	end,
 })

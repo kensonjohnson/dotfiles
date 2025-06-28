@@ -31,15 +31,14 @@ alias man=batman
 alias pbat=prettybat
 alias nrd="npm run dev"
 alias lzd=lazydocker
-alias brew_dump="brew bundle dump --force"
 
 #-------------------------------#
 #--- Customize Prompts ---------#
 #-------------------------------#
 
 # Set Prompt to show current directory in Bright Yellow
-PROMPT='%B%F{130}┌─[%5~]
-└[$]%f%b '
+PROMPT='%B%F{130}┏━[%5~]
+┗━󰁕%f%b '
 
 # Set Right Prompt to show last command status
 RPROMPT='%B%F{130}[%f%b%(?.%F{green}√.%F{red}?%?)%f%B%F{130}]%f%b'
