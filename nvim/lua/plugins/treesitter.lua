@@ -22,7 +22,6 @@ return {
 				"python",
 				"javascript",
 				"typescript",
-				"sql",
 				"templ",
 			},
 			auto_install = true,

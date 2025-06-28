@@ -9,7 +9,6 @@ return {
 			require("blink-cmp").setup({
 				keymap = {
 					preset = "enter",
-					["<A-y>"] = require("minuet").make_blink_map(),
 				},
 				appearance = {
 					nerd_font_variant = "mono",
@@ -18,14 +17,7 @@ return {
 					documentation = { auto_show = false },
 				},
 				sources = {
-					default = { "lsp", "path", "snippets", "buffer", "minuet" },
-					providers = {
-						minuet = {
-							name = "minuet",
-							module = "minuet.blink",
-							score_offset = 8, -- gives minuet higher priority
-						},
-					},
+					default = { "lsp", "path", "snippets", "buffer" },
 				},
 				fuzzy = { implementation = "prefer_rust_with_warning" },
 				signature = { enabled = true },

@@ -11,7 +11,6 @@ return {
 			},
 			sections = {
 				lualine_x = {
-					require("minuet.lualine"),
 					"filetype",
 				},
 			},
