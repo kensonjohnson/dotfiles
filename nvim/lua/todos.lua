@@ -1,9 +1,6 @@
--- If there is no `untoggled` or `done` label on an item, mark it as done
--- and move it to the "## completed tasks" markdown heading in the same file, if
--- the heading does not exist, it will be created, if it exists, items will be
--- appended to it at the top lamw25wmal
---
--- If an item is moved to that heading, it will be added the `done` label
+-- Toggle task completion status:
+-- - If task has no label: mark as done with timestamp
+-- - If task has `done:` label: remove label and mark as incomplete
 vim.keymap.set("n", "<M-x>", function()
 	-- Customizable variables
 	-- NOTE: Customize the completion label
@@ -11,8 +8,7 @@ vim.keymap.set("n", "<M-x>", function()
 	-- NOTE: Customize the timestamp format
 	local timestamp = os.date("%y%m%d-%H%M")
 	-- local timestamp = os.date("%y%m%d")
-	-- NOTE: Customize the heading and its level
-	local tasks_heading = "## Completed tasks"
+
 	-- Save the view to preserve folds
 	vim.cmd("mkview")
 	local api = vim.api
@@ -70,26 +66,15 @@ vim.keymap.set("n", "<M-x>", function()
 		table.insert(chunk, lines[i + 1])
 	end
 	------------------------------------------------------------------------------
-	-- 2. Check if chunk has [done: ...] or [untoggled], then transform them
+	-- 2. Check if chunk has [done: ...], then transform them
 	------------------------------------------------------------------------------
 	local has_done_index = nil
-	local has_untoggled_index = nil
 	for i, line in ipairs(chunk) do
 		-- Replace `[done: ...]` -> `` `done: ...` ``
 		chunk[i] = line:gsub("%[done:([^%]]+)%]", "`" .. label_done .. "%1`")
-		-- Replace `[untoggled]` -> `` `untoggled` ``
-		chunk[i] = chunk[i]:gsub("%[untoggled%]", "`untoggled`")
 		if chunk[i]:match("`" .. label_done .. ".-`") then
 			has_done_index = i
 			break
-		end
-	end
-	if not has_done_index then
-		for i, line in ipairs(chunk) do
-			if line:match("`untoggled`") then
-				has_untoggled_index = i
-				break
-			end
 		end
 	end
 	------------------------------------------------------------------------------
@@ -115,7 +100,7 @@ vim.keymap.set("n", "<M-x>", function()
 		return prefix .. " " .. label .. rest
 	end
 	local function removeLabel(line)
-		-- If there's a label (like `` `done: ...` `` or `` `untoggled` ``) right after
+		-- If there's a label (like `` `done: ...` ``) right after
 		-- '- [x]' or '- [ ]', remove it
 		return line:gsub("^(%s*%- %[[x ]%])%s+`.-`", "%1")
 	end
@@ -132,73 +117,22 @@ vim.keymap.set("n", "<M-x>", function()
 	-- 6. Main toggle logic
 	------------------------------------------------------------------------------
 	if has_done_index then
-		chunk[has_done_index] = removeLabel(chunk[has_done_index]):gsub("`" .. label_done .. ".-`", "`untoggled`")
+		chunk[has_done_index] = removeLabel(chunk[has_done_index]):gsub("`" .. label_done .. ".-`", "")
 		chunk[1] = bulletToBlank(chunk[1])
 		chunk[1] = removeLabel(chunk[1])
-		chunk[1] = insertLabelAfterBracket(chunk[1], "`untoggled`")
 		updateBufferWithChunk(chunk)
 		vim.notify("Untoggled", vim.log.levels.INFO)
-	elseif has_untoggled_index then
-		chunk[has_untoggled_index] =
-			removeLabel(chunk[has_untoggled_index]):gsub("`untoggled`", "`" .. label_done .. " " .. timestamp .. "`")
+	else
 		chunk[1] = bulletToX(chunk[1])
-		chunk[1] = removeLabel(chunk[1])
 		chunk[1] = insertLabelAfterBracket(chunk[1], "`" .. label_done .. " " .. timestamp .. "`")
 		updateBufferWithChunk(chunk)
 		vim.notify("Completed", vim.log.levels.INFO)
-	else
-		-- Save original window view before modifications
-		local win = api.nvim_get_current_win()
-		local view = api.nvim_win_call(win, function()
-			return vim.fn.winsaveview()
-		end)
-		chunk[1] = bulletToX(chunk[1])
-		chunk[1] = insertLabelAfterBracket(chunk[1], "`" .. label_done .. " " .. timestamp .. "`")
-		-- Remove chunk from the original lines
-		for i = chunk_end, chunk_start, -1 do
-			table.remove(lines, i + 1)
-		end
-		-- Append chunk under 'tasks_heading'
-		local heading_index = nil
-		for i, line in ipairs(lines) do
-			if line:match("^" .. tasks_heading) then
-				heading_index = i
-				break
-			end
-		end
-		if heading_index then
-			for _, cLine in ipairs(chunk) do
-				table.insert(lines, heading_index + 1, cLine)
-				heading_index = heading_index + 1
-			end
-			-- Remove any blank line right after newly inserted chunk
-			local after_last_item = heading_index + 1
-			if lines[after_last_item] == "" then
-				table.remove(lines, after_last_item)
-			end
-		else
-			table.insert(lines, tasks_heading)
-			for _, cLine in ipairs(chunk) do
-				table.insert(lines, cLine)
-			end
-			local after_last_item = #lines + 1
-			if lines[after_last_item] == "" then
-				table.remove(lines, after_last_item)
-			end
-		end
-		-- Update buffer content
-		vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
-		vim.notify("Completed", vim.log.levels.INFO)
-		-- Restore window view to preserve scroll position
-		api.nvim_win_call(win, function()
-			vim.fn.winrestview(view)
-		end)
 	end
 	-- Write changes and restore view to preserve folds
 	-- "Update" saves only if the buffer has been modified since the last save
 	vim.cmd("silent update")
 	vim.cmd("loadview")
-end, { desc = "[P]Toggle task and move it to 'done'" })
+end, { desc = "[P]Toggle task completion status" })
 
 -- Iterate through incomplete tasks in telescope
 -- You can confirm in your teminal lamw25wmal with:
