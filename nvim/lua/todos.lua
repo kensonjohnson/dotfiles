@@ -56,7 +56,7 @@ local function findTaskChunk()
 		lines = lines,
 		chunk = chunk,
 		chunk_start = chunk_start,
-		chunk_end = chunk_end
+		chunk_end = chunk_end,
 	}
 end
 
@@ -95,7 +95,7 @@ end
 
 local function processTask(status_char, add_timestamp, status_name)
 	vim.cmd("mkview")
-	
+
 	local task_data = findTaskChunk()
 	if not task_data then
 		print("Not a task bullet: no action taken.")
@@ -104,7 +104,7 @@ local function processTask(status_char, add_timestamp, status_name)
 	end
 
 	local chunk = task_data.chunk
-	
+
 	-- Set status and remove labels
 	chunk[1] = setStatusChar(chunk[1], status_char)
 	for i = 1, #chunk do
@@ -126,7 +126,7 @@ end
 -- Main completion toggle
 vim.keymap.set("n", "<M-x>", function()
 	vim.cmd("mkview")
-	
+
 	local task_data = findTaskChunk()
 	if not task_data then
 		print("Not a task bullet: no action taken.")
@@ -135,7 +135,7 @@ vim.keymap.set("n", "<M-x>", function()
 	end
 
 	local chunk = task_data.chunk
-	
+
 	-- Transform [Done: ...] labels to backticks
 	for i, line in ipairs(chunk) do
 		chunk[i] = line:gsub("%[" .. LABEL_DONE .. "([^%]]+)%]", "`" .. LABEL_DONE .. "%1`")
@@ -168,29 +168,29 @@ vim.keymap.set("n", "<M-x>", function()
 
 	vim.cmd("silent update")
 	vim.cmd("loadview")
-end, { desc = "[P]Toggle task completion status" })
+end, { desc = "Toggle task completion status" })
 
 -- Status setter keymaps
 vim.keymap.set("n", "<M-/>", function()
 	processTask("/", false, "Set to in progress")
-end, { desc = "[P]Set task to in progress" })
+end, { desc = "Set task to in progress" })
 
 vim.keymap.set("n", "<M-->", function()
 	processTask("-", false, "Set to cancelled")
-end, { desc = "[P]Set task to cancelled" })
+end, { desc = "Set task to cancelled" })
 
 vim.keymap.set("n", "<M-q>", function()
 	processTask("?", false, "Set to question")
-end, { desc = "[P]Set task to question" })
+end, { desc = "Set task to question" })
 
 vim.keymap.set("n", "<M-i>", function()
 	processTask("!", false, "Set to important")
-end, { desc = "[P]Set task to important" })
+end, { desc = "Set task to important" })
 
 -- Smart toggle
 vim.keymap.set("n", "<M-CR>", function()
 	vim.cmd("mkview")
-	
+
 	local task_data = findTaskChunk()
 	if not task_data then
 		print("Not a task bullet: no action taken.")
@@ -200,7 +200,7 @@ vim.keymap.set("n", "<M-CR>", function()
 
 	local chunk = task_data.chunk
 	local current_status = getCurrentStatus(chunk[1])
-	
+
 	-- Cycle logic: [ ] → [/] → [x] → [ ]
 	-- Special cases: [-], [?], [!] → [x] → [ ]
 	local cycle = {
@@ -209,11 +209,11 @@ vim.keymap.set("n", "<M-CR>", function()
 		["x"] = { status = " ", name = "Set to todo", timestamp = false },
 		["-"] = { status = "x", name = "Completed", timestamp = true },
 		["?"] = { status = "x", name = "Completed", timestamp = true },
-		["!"] = { status = "x", name = "Completed", timestamp = true }
+		["!"] = { status = "x", name = "Completed", timestamp = true },
 	}
 
 	local next_state = cycle[current_status] or cycle[" "]
-	
+
 	-- Set status and remove labels
 	chunk[1] = setStatusChar(chunk[1], next_state.status)
 	for i = 1, #chunk do
@@ -230,7 +230,17 @@ vim.keymap.set("n", "<M-CR>", function()
 	vim.notify(next_state.name, vim.log.levels.INFO)
 	vim.cmd("silent update")
 	vim.cmd("loadview")
-end, { desc = "[P]Smart toggle task status" })
+end, { desc = "Smart toggle task status" })
+
+-- Create new task
+vim.keymap.set("n", "<M-n>", function()
+	local line = vim.api.nvim_get_current_line()
+	local indent = line:match("^(%s*)")
+	local cursor_pos = vim.api.nvim_win_get_cursor(0)
+	vim.api.nvim_set_current_line(indent .. "- [ ] ")
+	vim.api.nvim_win_set_cursor(0, { cursor_pos[1], #(indent .. "- [ ] ") })
+	vim.cmd("startinsert!")
+end, { desc = "Create new task" })
 
 -- Telescope search keymaps
 vim.keymap.set("n", "<leader>tt", function()
@@ -241,9 +251,11 @@ vim.keymap.set("n", "<leader>tt", function()
 		use_regex = true,
 		initial_mode = "normal",
 		layout_config = { preview_width = 0.5 },
-		additional_args = function() return { "--no-ignore" } end,
+		additional_args = function()
+			return { "--no-ignore" }
+		end,
 	}))
-end, { desc = "[P]Search for incomplete tasks" })
+end, { desc = "Search for incomplete tasks" })
 
 vim.keymap.set("n", "<leader>tc", function()
 	require("telescope.builtin").grep_string(require("telescope.themes").get_ivy({
@@ -253,6 +265,8 @@ vim.keymap.set("n", "<leader>tc", function()
 		use_regex = true,
 		initial_mode = "normal",
 		layout_config = { preview_width = 0.5 },
-		additional_args = function() return { "--no-ignore" } end,
+		additional_args = function()
+			return { "--no-ignore" }
+		end,
 	}))
-end, { desc = "[P]Search for completed tasks" })
+end, { desc = "Search for completed tasks" })
