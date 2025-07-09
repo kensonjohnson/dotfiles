@@ -188,7 +188,7 @@ vim.keymap.set("n", "<M-i>", function()
 end, { desc = "[P]Set task to important" })
 
 -- Smart toggle
-vim.keymap.set("n", "<M-t>", function()
+vim.keymap.set("n", "<M-CR>", function()
 	vim.cmd("mkview")
 	
 	local task_data = findTaskChunk()
