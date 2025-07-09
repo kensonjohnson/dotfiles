@@ -26,9 +26,9 @@ alias v="nvim ."
 alias ls=eza
 alias la="eza -la --git"
 alias cat=bat
+alias pcat=prettybat
 alias rm=trash
 alias man=batman
-alias pbat=prettybat
 alias nrd="npm run dev"
 alias lzd=lazydocker
 
@@ -54,6 +54,7 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH=${PATH}:$(go env GOBIN)
 export PATH="/opt/homebrew/opt/node@22/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 
 #-------------------------------#
 #--- Functions -----------------#
