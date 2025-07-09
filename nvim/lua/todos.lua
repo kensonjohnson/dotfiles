@@ -1,6 +1,6 @@
 -- Configuration
 local LABEL_DONE = "Done:"
-local TIMESTAMP_FORMAT = "%y%m%d-%H%M"
+local TIMESTAMP_FORMAT = "%m/%d/%y"
 
 -- Shared helper functions
 local function findTaskChunk()
