@@ -151,7 +151,8 @@ EOF
   fi
 
   # Start NeoVim
-  nvim "$full_path" -c "cd $pkm_dir"
+  cd $pkm_dir
+  nvim "$full_path" 
 }
 
 note()
