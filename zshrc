@@ -5,6 +5,7 @@
 export NULLCMD=bat
 export DOTFILES="$HOME/.dotfiles"
 export HOMEBREW_BUNDLE_FILE="$DOTFILES/Brewfile"
+export PKM_DIR=~/Developer/pkm
 
 #-------------------------------#
 #--- Change ZSH Options --------#
@@ -115,8 +116,7 @@ stop-docker()
 daily-note()
 {
   # Specify below the directory in which you want to create your daily note
-  pkm_dir=~/Developer/pkm
-  main_note_dir=${pkm_dir}/Daily
+  main_note_dir=${PKM_DIR}/Daily
 
   # Get current date components
   current_year=$(date +"%Y")
@@ -151,15 +151,14 @@ EOF
   fi
 
   # Start NeoVim
-  cd $pkm_dir
+  cd $PKM_DIR
   nvim "$full_path" 
 }
 
 note()
 {
   # Use the same pkm directory as daily-note
-  pkm_dir=~/Developer/pkm
-  inbox_dir=${pkm_dir}/+Inbox
+  inbox_dir=${PKM_DIR}/+Inbox
   
   # Generate a random filename (8 characters)
   random_name=$(openssl rand -hex 4)
@@ -177,7 +176,7 @@ note()
 EOF
   
   # Start NeoVim
-  nvim "$full_path" -c "cd $pkm_dir"
+  nvim "$full_path" -c "cd $PKM_DIR"
 }
 
 #-------------------------------#
