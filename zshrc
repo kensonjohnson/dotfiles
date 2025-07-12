@@ -154,6 +154,28 @@ EOF
   nvim "$full_path" -c "cd $pkm_dir"
 }
 
+note()
+{
+  # Use the same pkm directory as daily-note
+  pkm_dir=~/Developer/pkm
+  inbox_dir=${pkm_dir}/+Inbox
+  
+  # Generate a random filename (8 characters)
+  random_name=$(openssl rand -hex 4)
+  full_path=${inbox_dir}/${random_name}.md
+  
+  # Check if the inbox directory exists, if not, create it
+  if [ ! -d "$inbox_dir" ]; then
+    mkdir -p "$inbox_dir"
+  fi
+  
+  # Create the note file
+  touch "$full_path"
+  
+  # Start NeoVim
+  nvim "$full_path" -c "cd $pkm_dir"
+}
+
 #-------------------------------#
 #--- Load ZSH Plugins ----------#
 #-------------------------------#
