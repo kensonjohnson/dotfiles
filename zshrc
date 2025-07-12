@@ -169,8 +169,11 @@ note()
     mkdir -p "$inbox_dir"
   fi
   
-  # Create the note file
-  touch "$full_path"
+  # Create the note file with template
+  cat <<EOF >"$full_path"
+# ${random_name}
+
+EOF
   
   # Start NeoVim
   nvim "$full_path" -c "cd $pkm_dir"
