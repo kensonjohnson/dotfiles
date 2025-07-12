@@ -1,12 +1,12 @@
 return {
-	"k-lar/dynomark.nvim",
+	"kensonjohnson/dynomark.nvim",
+	branch = "main",
 	dependencies = "nvim-treesitter/nvim-treesitter",
 	ft = "markdown",
-	opts = {
-		results_view_location = "horizontal",
-	},
-	config = function(_, opts)
-		require("dynomark").setup(opts)
+	config = function()
+		require("dynomark").setup({
+			results_view_location = "horizontal",
+		})
 
 		-- Track if Dynomark has been globally enabled
 		local dynomark_enabled = false
