@@ -112,6 +112,48 @@ stop-docker()
   docker stop $(docker ps -a -q)
 }
 
+daily-note()
+{
+  # Specify below the directory in which you want to create your daily note
+  pkm_dir=~/Developer/pkm
+  main_note_dir=${pkm_dir}/Daily
+
+  # Get current date components
+  current_year=$(date +"%Y")
+  current_month_num=$(date +"%m")
+  current_month_abbr=$(date +"%b")
+  current_day=$(date +"%d")
+  current_weekday=$(date +"%A")
+
+  # Construct the directory structure and filename
+  note_dir=${main_note_dir}/${current_year}/${current_month_num}-${current_month_abbr}
+  note_name=${current_year}-${current_month_num}-${current_day}-${current_weekday}
+  full_path=${note_dir}/${note_name}.md
+
+  # Check if the directory exists, if not, create it
+  if [ ! -d "$note_dir" ]; then
+    mkdir -p "$note_dir"
+  fi
+
+  # Create the daily note if it does not already exist
+  if [ ! -f "$full_path" ]; then
+    cat <<EOF >"$full_path"
+# Contents
+
+<!-- toc -->
+
+- [Daily note](#daily-note)
+
+<!-- tocstop -->
+
+## Daily note
+EOF
+  fi
+
+  # Start NeoVim
+  nvim "$full_path" -c "cd $pkm_dir"
+}
+
 #-------------------------------#
 #--- Load ZSH Plugins ----------#
 #-------------------------------#
