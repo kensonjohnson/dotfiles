@@ -122,7 +122,7 @@ return {
 				html = {
 					filetypes = { "html", "templ" },
 				},
-				-- marksman = {},
+				marksman = {},
 				bashls = {},
 				templ = {},
 				tailwindcss = {
