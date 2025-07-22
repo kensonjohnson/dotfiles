@@ -5,7 +5,6 @@
 export NULLCMD=bat
 export DOTFILES="$HOME/.dotfiles"
 export HOMEBREW_BUNDLE_FILE="$DOTFILES/Brewfile"
-export PKM_DIR=~/Developer/pkm
 
 #-------------------------------#
 #--- Change ZSH Options --------#
@@ -111,72 +110,6 @@ kanata-stop()
 stop-docker()
 {
   docker stop $(docker ps -a -q)
-}
-
-daily-note()
-{
-  # Specify below the directory in which you want to create your daily note
-  main_note_dir=${PKM_DIR}/Daily
-
-  # Get current date components
-  current_year=$(date +"%Y")
-  current_month_num=$(date +"%m")
-  current_month_abbr=$(date +"%b")
-  current_day=$(date +"%d")
-  current_weekday=$(date +"%A")
-
-  # Construct the directory structure and filename
-  note_dir=${main_note_dir}/${current_year}/${current_month_num}-${current_month_abbr}
-  note_name=${current_year}-${current_month_num}-${current_day}-${current_weekday}
-  full_path=${note_dir}/${note_name}.md
-
-  # Check if the directory exists, if not, create it
-  if [ ! -d "$note_dir" ]; then
-    mkdir -p "$note_dir"
-  fi
-
-  # Create the daily note if it does not already exist
-  if [ ! -f "$full_path" ]; then
-    cat <<EOF >"$full_path"
-# Contents
-
-<!-- toc -->
-
-- [Daily note](#daily-note)
-
-<!-- tocstop -->
-
-## Daily note
-EOF
-  fi
-
-  # Start NeoVim
-  cd $PKM_DIR
-  nvim "$full_path" 
-}
-
-note()
-{
-  # Use the same pkm directory as daily-note
-  inbox_dir=${PKM_DIR}/+Inbox
-  
-  # Generate a random filename (8 characters)
-  random_name=$(openssl rand -hex 4)
-  full_path=${inbox_dir}/${random_name}.md
-  
-  # Check if the inbox directory exists, if not, create it
-  if [ ! -d "$inbox_dir" ]; then
-    mkdir -p "$inbox_dir"
-  fi
-  
-  # Create the note file with template
-  cat <<EOF >"$full_path"
-# ${random_name}
-
-EOF
-  
-  # Start NeoVim
-  nvim "$full_path" -c "cd $PKM_DIR"
 }
 
 #-------------------------------#
