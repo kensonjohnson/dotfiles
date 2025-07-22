@@ -22,6 +22,7 @@ require("options")
 require("autocommands")
 require("keymaps")
 require("todos")
+require("notes")
 require("filetypes")
 
 ----------------------------------------------------------------------
