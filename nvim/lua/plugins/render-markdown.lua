@@ -4,6 +4,7 @@ return {
 	---@module 'render-markdown'
 	---@type render.md.UserConfig
 	opts = {
+		dash = { width = 80 },
 		code = {
 			disable_background = { "diff", "dynomark" },
 			language_border = " ",
