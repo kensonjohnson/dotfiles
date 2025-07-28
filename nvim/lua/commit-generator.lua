@@ -796,6 +796,8 @@ function M.setup(user_config)
 		M.config = vim.tbl_deep_extend("force", M.config, user_config)
 	end
 
+
+
 	--- Create the GenerateCommitMsg command
 	vim.api.nvim_create_user_command("GenerateCommitMsg", function(opts)
 		local changes = M.analyze_changes()
@@ -848,9 +850,9 @@ function M.setup(user_config)
 		desc = "Generate commit message based on staged changes",
 	})
 
-	--- Set up buffer-local keymaps for Neogit commit buffers
+	--- Set up buffer-local keymaps for git commit buffers
 	vim.api.nvim_create_autocmd("FileType", {
-		pattern = "NeogitCommitMessage",
+		pattern = "gitcommit",
 		callback = function()
 			vim.keymap.set("n", "<leader>gm", ":GenerateCommitMsg --insert<CR>", {
 				buffer = true,
