@@ -3,3 +3,6 @@ Brewfile.lock.json
 
 # Mac File System
 .DS_Store
+
+# Private Environment Variables
+.env.local

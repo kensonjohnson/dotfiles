@@ -7,6 +7,15 @@ export DOTFILES="$HOME/.dotfiles"
 export HOMEBREW_BUNDLE_FILE="$DOTFILES/Brewfile"
 
 #-------------------------------#
+#--- Load Private Environment --#
+#-------------------------------#
+
+# Load private environment variables (git-ignored)
+if [[ -f "$DOTFILES/.env.local" ]]; then
+    source "$DOTFILES/.env.local"
+fi
+
+#-------------------------------#
 #--- Change ZSH Options --------#
 #-------------------------------#
 

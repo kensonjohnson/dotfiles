@@ -8,7 +8,7 @@ return {
 			---@type blink.cmp.Config
 			require("blink-cmp").setup({
 				keymap = {
-					preset = "enter",
+					preset = "super-tab",
 				},
 				appearance = {
 					nerd_font_variant = "mono",
