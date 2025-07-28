@@ -22,7 +22,7 @@ autoload -Uz compinit && compinit
 alias vim=nvim
 alias vi=nvim
 alias v.="nvim ."
-alias v="nvim ."
+alias v="nvim"
 alias ls=eza
 alias la="eza -la --git"
 alias cat=bat

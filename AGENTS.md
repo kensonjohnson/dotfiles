@@ -8,26 +8,22 @@
 ## Code Style Guidelines
 
 ### Lua (Neovim config)
-- 2-space indentation, expand tabs
-- Use double quotes for strings
-- Descriptive variable names with snake_case
-- Group related configurations in separate files under `lua/`
-- Use `require()` for module imports
-- Comment sections with `---` for major blocks
+- 2-space indentation with tabs, use double quotes for strings
+- snake_case for variables, descriptive names (e.g., `highlight_augroup`)
+- Group related configs in separate files under `lua/plugins/`
+- Use `require()` for module imports, return table for plugin specs
+- Comment sections with `---` for major blocks, `--` for inline
+- Use `vim.keymap.set()` for keymaps with descriptive desc parameter
+- Prefer function callbacks over string commands in autocommands
 
 ### Shell Scripts (zsh)
-- Use `#---` comment blocks for sections
-- Export variables in UPPERCASE
-- Function names in lowercase with underscores
-- Prefer `$()` over backticks for command substitution
+- Use `#---` comment blocks for major sections
+- Export variables in UPPERCASE, function names in lowercase_underscore
+- Prefer `$()` over backticks, use double quotes for variable expansion
+- Group aliases by category with descriptive comments
 
 ### Configuration Files
-- Maintain existing indentation patterns
-- Use descriptive comments explaining purpose
-- Keep related settings grouped together
-- Follow tool-specific conventions (e.g., kanata kbd syntax)
-
-## File Organization
-- Neovim: `nvim/lua/` for modular configuration
-- Shell: `zshrc` for interactive shell config, `zshenv` for environment
-- Tools: Separate directories per tool (ghostty/, kanata/, ssh/)
+- Maintain existing indentation patterns (tabs for Lua, spaces for others)
+- Use descriptive comments explaining purpose of complex configurations
+- Keep related settings grouped together logically
+- Follow tool-specific conventions (kanata kbd syntax, ghostty config format)
