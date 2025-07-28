@@ -27,10 +27,36 @@ cd ~/.dotfiles/
 brew bundle install --file=~/.dotfiles/Brewfile
 ```
 
-3. Create symlinks to config files:
+3. Setup environment variables:
+```sh
+cp ~/.dotfiles/.env.example ~/.dotfiles/.env.local
+```
+Edit `.env.local` and populate the required API keys and environment variables.
+
+4. Create symlinks to config files:
 ```sh
 zsh ~/.dotfiles/setupEnv.zsh
 ```
+
+### Environment Variables
+
+The dotfiles include features that require API keys (like AI-powered commit message generation). These are stored in a git-ignored `.env.local` file:
+
+1. **Copy the example file:**
+   ```sh
+   cp ~/.dotfiles/.env.example ~/.dotfiles/.env.local
+   ```
+
+2. **Edit `.env.local` and add your API keys:**
+   ```sh
+   nvim ~/.dotfiles/.env.local
+   ```
+
+3. **Available environment variables:**
+   - `ANTHROPIC_API_KEY` - For AI-powered commit message generation in Neovim
+   - Add other private environment variables as needed
+
+The `.env.local` file is automatically loaded by your shell and is git-ignored for security.
 
 ### Setup Kanata
 Unfortunately, MacOS makes it a little complicated to setup Kanata.
