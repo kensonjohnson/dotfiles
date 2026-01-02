@@ -82,10 +82,6 @@ local function getCurrentStatus(line)
 	return status or " "
 end
 
-local function hasLabel(line, label_pattern)
-	return line:match("`" .. label_pattern .. ".-`") ~= nil
-end
-
 local function updateBuffer(task_data, new_chunk)
 	for idx = task_data.chunk_start, task_data.chunk_end do
 		task_data.lines[idx + 1] = new_chunk[idx - task_data.chunk_start + 1]
