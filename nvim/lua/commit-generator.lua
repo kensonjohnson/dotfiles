@@ -7,7 +7,7 @@ M.config = {
 		enabled = true,
 		provider = "anthropic",
 		api_key_env = "ANTHROPIC_API_KEY",
-		model = "claude-3-5-haiku-latest",
+		model = "claude-haiku-4-5",
 		max_tokens = 100,
 		timeout = 5000,
 	},
@@ -297,20 +297,20 @@ function M.generate_ai_message(changes, repo_context, title_only)
 	if not M.config.ai.enabled then
 		return nil
 	end
-	
+
 	local api_key = vim.fn.getenv(M.config.ai.api_key_env)
 	if not api_key or api_key == vim.NIL or api_key == "" then
 		vim.notify("Anthropic API key not found in " .. M.config.ai.api_key_env, vim.log.levels.WARN)
 		return nil
 	end
-	
+
 	local prompt = M.build_ai_prompt(changes, repo_context, title_only)
 	local response = M.call_anthropic_api(prompt, api_key)
-	
+
 	if response then
 		return M.parse_ai_response(response)
 	end
-	
+
 	return nil
 end
 --- Build intelligent prompt for AI commit message generation
@@ -363,7 +363,7 @@ function M.build_ai_prompt(changes, repo_context, title_only)
 		prompt = prompt .. "2. Is under 50 characters\n"
 		prompt = prompt .. "3. Uses present tense, imperative mood\n"
 		prompt = prompt .. "4. Does not end with a period\n"
-		prompt = prompt .. "5. Captures the essence of the change\n\n"
+		prompt = prompt .. "5. Accurately describes what changed\n\n"
 		
 		prompt = prompt .. "Examples of good subject lines:\n"
 		prompt = prompt .. "- feat(auth): add OAuth login flow\n"
@@ -380,22 +380,27 @@ function M.build_ai_prompt(changes, repo_context, title_only)
 		end
 		prompt = prompt .. "2. Has a concise subject line under 50 characters\n"
 		prompt = prompt .. "3. Includes a blank line after the subject\n"
-		prompt = prompt .. "4. Has a detailed body explaining the 'why' and 'what' changed\n"
+		prompt = prompt .. "4. Has a detailed body that objectively describes WHAT changed\n"
 		prompt = prompt .. "5. Uses present tense, imperative mood\n"
-		prompt = prompt .. "6. Subject line does not end with a period\n\n"
+		prompt = prompt .. "6. Subject line does not end with a period\n"
+		prompt = prompt .. "7. Lists the specific changes, additions, modifications, or removals\n"
+		prompt = prompt .. "8. Does NOT speculate about intent, motivation, or reasons (the 'why')\n\n"
 		
 		prompt = prompt .. "Examples of good messages:\n"
 		prompt = prompt .. "feat(auth): add OAuth login flow\n\n"
-		prompt = prompt .. "Implement OAuth 2.0 authentication using Google provider.\n"
-		prompt = prompt .. "Adds login/logout functionality and user session management.\n\n"
+		prompt = prompt .. "Add OAuth 2.0 authentication with Google provider.\n"
+		prompt = prompt .. "Add login and logout endpoints.\n"
+		prompt = prompt .. "Add user session management with JWT tokens.\n\n"
 		
 		prompt = prompt .. "fix(api): handle null user responses\n\n"
-		prompt = prompt .. "Add null checks for user data in API responses.\n"
-		prompt = prompt .. "Prevents crashes when user profile is incomplete.\n\n"
+		prompt = prompt .. "Add null checks in user data response handler.\n"
+		prompt = prompt .. "Add default values for missing profile fields.\n"
+		prompt = prompt .. "Update error handling to catch null pointer exceptions.\n\n"
 		
-		prompt = prompt .. "docs: update installation instructions\n\n"
-		prompt = prompt .. "Add missing dependency installation steps and\n"
-		prompt = prompt .. "clarify environment setup requirements.\n\n"
+		prompt = prompt .. "refactor(database): restructure query builder\n\n"
+		prompt = prompt .. "Extract query building logic into separate methods.\n"
+		prompt = prompt .. "Move parameter validation to dedicated validator class.\n"
+		prompt = prompt .. "Rename ambiguous method names for clarity.\n\n"
 		
 		prompt = prompt .. "Return only the commit message (subject + body), nothing else:"
 	end
@@ -533,21 +538,21 @@ function M.generate_message(changes, force_method, title_only)
 	end
 
 	local repo_context = M.detect_repo_context()
-	
+
 	--- Try AI generation first (unless forced otherwise)
 	if force_method ~= "rules" and force_method ~= "generic" then
 		local ai_message = M.generate_ai_message(changes, repo_context, title_only)
 		if ai_message then
 			return ai_message
 		end
-		
+
 		--- If AI was specifically requested but failed, notify user
 		if force_method == "ai" then
 			vim.notify("AI generation failed, no fallback available", vim.log.levels.ERROR)
 			return "chore: update files"
 		end
 	end
-	
+
 	--- Fallback to rule-based generation (always title-only for rule-based)
 	if M.config.fallback.use_rules and force_method ~= "generic" then
 		local rule_message = M.generate_rule_based_message(changes, repo_context)
@@ -555,12 +560,12 @@ function M.generate_message(changes, force_method, title_only)
 			return rule_message
 		end
 	end
-	
+
 	--- Final fallback to generic message (always title-only)
 	if M.config.fallback.use_generic then
 		return M.generate_generic_message(changes, repo_context)
 	end
-	
+
 	return "chore: update files"
 end
 --- Generate commit message using rule-based approach
@@ -796,8 +801,6 @@ function M.setup(user_config)
 		M.config = vim.tbl_deep_extend("force", M.config, user_config)
 	end
 
-
-
 	--- Create the GenerateCommitMsg command
 	vim.api.nvim_create_user_command("GenerateCommitMsg", function(opts)
 		local changes = M.analyze_changes()
@@ -809,7 +812,7 @@ function M.setup(user_config)
 		local force_method = nil
 		local action = "copy"
 		local title_only = false
-		
+
 		--- Parse arguments
 		for _, arg in ipairs(args) do
 			if arg == "--ai-only" then
@@ -840,7 +843,10 @@ function M.setup(user_config)
 			vim.fn.setreg("+", message)
 			local method_info = force_method and " (" .. force_method .. ")" or ""
 			local format_info = title_only and " (title only)" or ""
-			vim.notify("Commit message copied to clipboard" .. method_info .. format_info .. ": " .. message, vim.log.levels.INFO)
+			vim.notify(
+				"Commit message copied to clipboard" .. method_info .. format_info .. ": " .. message,
+				vim.log.levels.INFO
+			)
 		end
 	end, {
 		nargs = "*",
@@ -947,4 +953,3 @@ function M.generate_multiple_options(changes)
 end
 
 return M
-
