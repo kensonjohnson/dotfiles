@@ -26,8 +26,8 @@ return {
 					enabled = true,
 					provider = "anthropic",
 					api_key_env = "ANTHROPIC_API_KEY",
-					model = "claude-3-5-haiku-latest",
-					max_tokens = 300,
+					model = "claude-haiku-4-5",
+					max_tokens = 500,
 					timeout = 5000,
 				},
 				format = {
