@@ -32,6 +32,13 @@ return {
 				end,
 				desc = "Create quick note",
 			},
+			{
+				"<leader>nm",
+				function()
+					require("notes").add_frontmatter()
+				end,
+				desc = "Add frontmatter to current md file",
+			},
 		},
 		cmd = { "DailyNote", "TomorrowNote", "QuickNote" },
 	},
