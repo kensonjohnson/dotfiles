@@ -91,3 +91,7 @@ vim.keymap.set("n", "<leader>tw", ":Twilight<enter>", { desc = "Toggle [TW]iligh
 
 -- ZenMode
 vim.keymap.set("n", "<leader>zm", ":ZenMode<enter>", { desc = "Toggle [Z]en[Mode]" })
+
+-- Generate UUID
+vim.keymap.set("n", "<M-u>", "i<c-r>=trim(system('uuidgen'))<CR><ESC>", { desc = "Create [u]uid v4 on next line" })
+vim.keymap.set("i", "<M-u>", "<c-r>=trim(system('uuidgen'))<CR>", { desc = "Create [u]uid v4 on next line" })

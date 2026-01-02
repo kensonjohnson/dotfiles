@@ -2,6 +2,7 @@ export HOMEBREW_CASK_OPTS="--no-quarantine --no-binaries"
 export HOMEBREW_BUNDLE_DUMP_NO_VSCODE=true
 export GOPATH="$HOME/Developer/go/"
 export GOBIN="$HOME/Developer/go/bin"
+export EDITOR=nvim
 
 function exists() {
   # `command -v` is similar to `which`

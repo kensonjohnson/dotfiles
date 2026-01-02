@@ -9,6 +9,7 @@ return {
 				pkm_dir = "~/Developer/pkm",
 			})
 		end,
+		ft = "markdown",
 		keys = {
 			{
 				"<leader>nd",

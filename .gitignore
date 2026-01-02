@@ -6,3 +6,6 @@ Brewfile.lock.json
 
 # Private Environment Variables
 .env.local
+
+# Neovim spell files (generated)
+nvim/spell/
