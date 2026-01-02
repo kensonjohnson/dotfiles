@@ -6,3 +6,5 @@ font-size = 16
 quit-after-last-window-closed = true
 
 macos-option-as-alt = true
+
+window-inherit-working-directory = true
