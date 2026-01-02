@@ -40,6 +40,6 @@ return {
 				desc = "Add frontmatter to current md file",
 			},
 		},
-		cmd = { "DailyNote", "TomorrowNote", "QuickNote" },
+		cmd = { "DailyNote", "TomorrowNote", "QuickNote", "AddFrontmatter" },
 	},
 }
