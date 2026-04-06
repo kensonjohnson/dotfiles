@@ -1,34 +1,10 @@
 return {
 	{ -- Highlight, edit, and navigate code
-		"nvim-treesitter/nvim-treesitter",
+		-- nvim-treesitter has been archived and is incompatible with Neovim 0.12.0+
+		-- Use built-in treesitter with ts-comments.nvim instead
+		-- Reference: https://github.com/nvim-treesitter/nvim-treesitter/issues/7846
+		"folke/ts-comments.nvim",
+		opts = {},
 		event = "VeryLazy",
-		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
-		-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-		opts = {
-			ensure_installed = {
-				"bash",
-				"diff",
-				"html",
-				"lua",
-				"luadoc",
-				"markdown",
-				"markdown_inline",
-				"query",
-				"vim",
-				"vimdoc",
-				"tsx",
-				"go",
-				"python",
-				"javascript",
-				"typescript",
-				"templ",
-			},
-			auto_install = true,
-			highlight = {
-				enable = true,
-			},
-			indent = { enable = true },
-		},
 	},
 }

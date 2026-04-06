@@ -1,7 +1,6 @@
 return {
 	"kensonjohnson/dynomark.nvim",
 	branch = "main",
-	dependencies = "nvim-treesitter/nvim-treesitter",
 	ft = "markdown",
 	config = function()
 		require("dynomark").setup({

@@ -159,14 +159,14 @@ return {
 
 			require("mason").setup()
 
-			-- You can add other tools here that you want Mason to install
-			-- for you, so that they are available from within Neovim.
-			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"stylua",
-				"pgformatter",
+			-- Install formatters separately from LSP servers
+			-- Formatters are handled by conform.nvim, not mason-lspconfig
+			require("mason-tool-installer").setup({
+				ensure_installed = {
+					"stylua",
+					"pgformatter",
+				},
 			})
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {},
