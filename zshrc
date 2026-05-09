@@ -22,6 +22,7 @@ fi
 # Setup autocompletions
 eval "$(brew shellenv)"
 fpath=($HOMEBREW_PREFIX/share/zsh/site-functions $fpath)
+fpath=(/Users/kenson/.docker/completions $fpath)
 autoload -Uz compinit && compinit
 
 if command -v ngrok &>/dev/null; then
