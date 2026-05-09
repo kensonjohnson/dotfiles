@@ -5,13 +5,6 @@ return {
 		event = "VeryLazy",
 	},
 
-	--- <leader>gc to comment visually selected regions
-	{
-		"numToStr/Comment.nvim",
-		event = "VeryLazy",
-		opts = {},
-	},
-
 	--- Create closing brackets automagically
 	{
 		"m4xshen/autoclose.nvim",
