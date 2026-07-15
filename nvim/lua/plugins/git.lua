@@ -24,11 +24,10 @@ return {
 			require("commit-generator").setup({
 				ai = {
 					enabled = true,
-					provider = "anthropic",
-					api_key_env = "ANTHROPIC_API_KEY",
-					model = "claude-haiku-4-5",
-					max_tokens = 500,
-					timeout = 5000,
+					provider = "openai-codex",
+					model = "gpt-5.6-luna",
+					thinking = "low",
+					timeout = 30000,
 				},
 				format = {
 					conventional_commits = true,

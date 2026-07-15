@@ -40,7 +40,7 @@ zsh ~/.dotfiles/setupEnv.zsh
 
 ### Environment Variables
 
-The dotfiles include features that require API keys (like AI-powered commit message generation). These are stored in a git-ignored `.env.local` file:
+The dotfiles can use API keys for optional features. These are stored in a git-ignored `.env.local` file:
 
 1. **Copy the example file:**
    ```sh
@@ -53,8 +53,10 @@ The dotfiles include features that require API keys (like AI-powered commit mess
    ```
 
 3. **Available environment variables:**
-   - `ANTHROPIC_API_KEY` - For AI-powered commit message generation in Neovim
+   - `BRAVE_API_KEY` - For Pi web search
    - Add other private environment variables as needed
+
+Neovim's AI commit-message generator uses your authenticated Pi ChatGPT session instead of an API key. Install Pi, run `pi`, and use `/login` to sign in with ChatGPT before invoking `:GenerateCommitMsg`.
 
 The `.env.local` file is automatically loaded by your shell and is git-ignored for security.
 

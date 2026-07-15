@@ -5,11 +5,10 @@ M.config = {
 	--- AI Configuration
 	ai = {
 		enabled = true,
-		provider = "anthropic",
-		api_key_env = "ANTHROPIC_API_KEY",
-		model = "claude-haiku-4-5",
-		max_tokens = 100,
-		timeout = 5000,
+		provider = "openai-codex",
+		model = "gpt-5.6-luna",
+		thinking = "low",
+		timeout = 30000,
 	},
 
 	--- Fallback behavior
@@ -288,7 +287,7 @@ function M.analyze_changes()
 	return changes
 end
 
---- Generate AI-powered commit message using Anthropic API
+--- Generate AI-powered commit message using Pi's authenticated OpenAI Codex provider
 --- @param changes table The changes from analyze_changes()
 --- @param repo_context table Repository context
 --- @param title_only boolean Whether to generate only the subject line
@@ -298,21 +297,15 @@ function M.generate_ai_message(changes, repo_context, title_only)
 		return nil
 	end
 
-	local api_key = vim.fn.getenv(M.config.ai.api_key_env)
-	if not api_key or api_key == vim.NIL or api_key == "" then
-		vim.notify("Anthropic API key not found in " .. M.config.ai.api_key_env, vim.log.levels.WARN)
+	if vim.fn.executable("pi") ~= 1 then
+		vim.notify("Pi is not installed or not available in PATH", vim.log.levels.WARN)
 		return nil
 	end
 
 	local prompt = M.build_ai_prompt(changes, repo_context, title_only)
-	local response = M.call_anthropic_api(prompt, api_key)
-
-	if response then
-		return M.parse_ai_response(response)
-	end
-
-	return nil
+	return M.call_pi(prompt)
 end
+
 --- Build intelligent prompt for AI commit message generation
 --- @param changes table The changes from analyze_changes()
 --- @param repo_context table Repository context
@@ -407,70 +400,65 @@ function M.build_ai_prompt(changes, repo_context, title_only)
 	return prompt
 end
 
---- Call Anthropic API to generate commit message
+--- Run Pi in isolated print mode to generate a commit message
 --- @param prompt string The prompt to send
---- @param api_key string Anthropic API key
---- @return string|nil API response or nil if failed
-function M.call_anthropic_api(prompt, api_key)
-	local curl_cmd = {
-		"curl",
-		"-s",
-		"-X",
-		"POST",
-		"https://api.anthropic.com/v1/messages",
-		"-H",
-		"Content-Type: application/json",
-		"-H",
-		"x-api-key: " .. api_key,
-		"-H",
-		"anthropic-version: 2023-06-01",
-		"--max-time",
-		tostring(math.floor(M.config.ai.timeout / 1000)),
-		"-d",
-		vim.fn.json_encode({
-			model = M.config.ai.model,
-			max_tokens = M.config.ai.max_tokens,
-			messages = {
-				{
-					role = "user",
-					content = prompt,
-				},
-			},
-		}),
+--- @return string|nil Generated commit message or nil if failed
+function M.call_pi(prompt)
+	local pi_cmd = {
+		"pi",
+		"--print",
+		"--no-session",
+		"--no-tools",
+		"--no-extensions",
+		"--no-skills",
+		"--no-prompt-templates",
+		"--no-context-files",
+		"--provider",
+		M.config.ai.provider,
+		"--model",
+		M.config.ai.model,
+		"--thinking",
+		M.config.ai.thinking,
+		"--system-prompt",
+		"Generate only the requested git commit message. Do not use tools or add commentary.",
 	}
 
-	local result = vim.fn.system(curl_cmd)
-	if vim.v.shell_error ~= 0 then
-		vim.notify("Failed to call Anthropic API", vim.log.levels.ERROR)
+	local result = vim.system(pi_cmd, {
+		stdin = prompt,
+		text = true,
+		timeout = M.config.ai.timeout,
+	}):wait()
+
+	if result.code ~= 0 then
+		local error_message = vim.trim(result.stderr or "")
+		if error_message == "" then
+			error_message = "unknown error"
+		end
+		vim.notify("Pi commit generation failed: " .. error_message, vim.log.levels.ERROR)
 		return nil
 	end
 
-	local ok, response = pcall(vim.fn.json_decode, result)
-	if not ok then
-		vim.notify("Failed to parse Anthropic API response", vim.log.levels.ERROR)
-		return nil
-	end
-
-	if response.error then
-		vim.notify("Anthropic API error: " .. (response.error.message or "Unknown error"), vim.log.levels.ERROR)
-		return nil
-	end
-
-	return response
+	return M.clean_ai_message(result.stdout)
 end
 
---- Parse AI response to extract commit message
---- @param response table API response
---- @return string|nil Commit message or nil if failed
-function M.parse_ai_response(response)
-	if response.content and response.content[1] and response.content[1].text then
-		local message = response.content[1].text:gsub("^%s+", ""):gsub("%s+$", "")
-		--- Remove any quotes or extra formatting
-		message = message:gsub('^"', ""):gsub('"$', "")
-		message = message:gsub("^'", ""):gsub("'$", "")
-		return message
+--- Normalize Pi's text output into a commit message
+--- @param message string|nil Pi output
+--- @return string|nil Commit message or nil if empty
+function M.clean_ai_message(message)
+	if not message or message == "" then
+		return nil
 	end
-	return nil
+
+	message = message:gsub("^%s+", ""):gsub("%s+$", "")
+	message = message:gsub("^```[^\n]*\n", ""):gsub("\n```$", "")
+	message = message:gsub('^"', ""):gsub('"$', "")
+	message = message:gsub("^'", ""):gsub("'$", "")
+
+	if message == "" then
+		return nil
+	end
+
+	return message
 end
 
 --- Truncate diff content to fit within API limits
