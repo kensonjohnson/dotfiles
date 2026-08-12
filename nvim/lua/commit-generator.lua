@@ -245,8 +245,8 @@ end
 --- Analyze staged changes using git diff
 --- @return table changes Table containing added, modified, deleted files and diff content
 function M.analyze_changes()
-	local name_status = vim.fn.system("git diff --cached --name-status")
-	if vim.v.shell_error ~= 0 then
+	local name_status = vim.system({ "git", "diff", "--cached", "--name-status", "-z" }):wait()
+	if name_status.code ~= 0 then
 		vim.notify("Error: No staged changes found", vim.log.levels.WARN)
 		return nil
 	end
@@ -259,21 +259,28 @@ function M.analyze_changes()
 		diff_content = "",
 	}
 
-	--- Parse file changes
-	for line in name_status:gmatch("[^\r\n]+") do
-		local status, file = line:match("^(%S+)%s+(.+)$")
-		if status and file then
-			if status == "A" then
+	--- Parse NUL-delimited fields so rename paths are not confused with spaces.
+	local fields = vim.split(name_status.stdout, "\0", { plain = true, trimempty = true })
+	local index = 1
+	while index <= #fields do
+		local status = fields[index]
+		index = index + 1
+
+		if status:match("^[RC]") then
+			local old_file, new_file = fields[index], fields[index + 1]
+			index = index + 2
+			if status:match("^R") and old_file and new_file then
+				table.insert(changes.renamed, { old = old_file, new = new_file })
+			end
+		else
+			local file = fields[index]
+			index = index + 1
+			if status == "A" and file then
 				table.insert(changes.added, file)
-			elseif status == "M" then
+			elseif status == "M" and file then
 				table.insert(changes.modified, file)
-			elseif status == "D" then
+			elseif status == "D" and file then
 				table.insert(changes.deleted, file)
-			elseif status:match("^R") then
-				local old_file, new_file = file:match("^(.+) -> (.+)$")
-				if old_file and new_file then
-					table.insert(changes.renamed, { old = old_file, new = new_file })
-				end
 			end
 		end
 	end
@@ -338,6 +345,13 @@ function M.build_ai_prompt(changes, repo_context, title_only)
 	end
 	if #changes.deleted > 0 then
 		prompt = prompt .. "Deleted: " .. table.concat(changes.deleted, ", ") .. "\n"
+	end
+	if #changes.renamed > 0 then
+		local renamed = {}
+		for _, rename in ipairs(changes.renamed) do
+			table.insert(renamed, rename.old .. " -> " .. rename.new)
+		end
+		prompt = prompt .. "Renamed: " .. table.concat(renamed, ", ") .. "\n"
 	end
 	prompt = prompt .. "\n"
 

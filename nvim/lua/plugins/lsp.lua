@@ -106,7 +106,7 @@ return {
 			--- See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			local servers = {
 				gopls = {
-					filetypes = { "go", "gomod", "gosum", "gotmpl", "gohtml", "tmpl" },
+					filetypes = { "go", "gomod", "gosum", "gotmpl", "tmpl" },
 				},
 				pyright = {},
 				ts_ls = {},
@@ -128,13 +128,13 @@ return {
 						"typescript",
 						"javascriptreact",
 						"typescriptreact",
-						"gohtml",
+						"gotmpl",
 					},
 					settings = {
 						tailwindCSS = {
 							includeLanguages = {
 								templ = "html",
-								gohtml = "html",
+								gotmpl = "html",
 							},
 						},
 					},
