@@ -11,14 +11,9 @@ return {
 	},
 	{ "Bilal2453/luvit-meta", lazy = true },
 	{
-		"seblj/roslyn.nvim",
-		ft = "cs",
-		opts = {},
-	},
-	{
 		-- Main LSP Configuration
 		"neovim/nvim-lspconfig",
-		event = "VeryLazy",
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
@@ -111,7 +106,7 @@ return {
 			--- See `:help lspconfig-all` for a list of all the pre-configured LSPs
 			local servers = {
 				gopls = {
-					filetypes = { "go", "gomod", "gosum", "gotmpl", "gohtml", "tmpl" },
+					filetypes = { "go", "gomod", "gosum", "gotmpl", "tmpl" },
 				},
 				pyright = {},
 				ts_ls = {},
@@ -133,13 +128,13 @@ return {
 						"typescript",
 						"javascriptreact",
 						"typescriptreact",
-						"gohtml",
+						"gotmpl",
 					},
 					settings = {
 						tailwindCSS = {
 							includeLanguages = {
 								templ = "html",
-								gohtml = "html",
+								gotmpl = "html",
 							},
 						},
 					},
@@ -154,13 +149,18 @@ return {
 						},
 					},
 				},
-				postgres_lsp = {},
+				postgres_lsp = {
+					workspace_required = false,
+				},
 			}
 
 			require("mason").setup()
+			require("mason-lspconfig").setup({
+				ensure_installed = vim.tbl_keys(servers),
+				automatic_enable = false,
+			})
 
-			-- Install formatters separately from LSP servers
-			-- Formatters are handled by conform.nvim, not mason-lspconfig
+			-- Formatters are handled by conform.nvim, not mason-lspconfig.
 			require("mason-tool-installer").setup({
 				ensure_installed = {
 					"stylua",
@@ -168,21 +168,11 @@ return {
 				},
 			})
 
-			require("mason-lspconfig").setup({
-				ensure_installed = {},
-				automatic_installation = false,
-				automatic_enable = true,
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						-- This handles overriding only values explicitly passed
-						-- by the server configuration above. Useful when disabling
-						-- certain features of an LSP (for example, turning off formatting for ts_ls)
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
-			})
+			for server_name, server in pairs(servers) do
+				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+				vim.lsp.config(server_name, server)
+			end
+			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
 	},
 }
