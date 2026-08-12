@@ -38,6 +38,11 @@ return {
 					lsp_format = lsp_format_opt,
 				}
 			end,
+			formatters = {
+				rustywind = {
+					append_args = { "--stdin-filename", "$FILENAME" },
+				},
+			},
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
@@ -53,7 +58,7 @@ return {
 				json = { "prettier", "prettierd", stop_after_first = true },
 				yaml = { "prettier", "prettierd", stop_after_first = true },
 				sql = { "pg_format" },
-				templ = { "templ" },
+				templ = { "templ", "rustywind" },
 			},
 		},
 	},

@@ -1,5 +1,35 @@
 return {
 	{
+		--- Standalone direct-Codex commit message generator
+		name = "commit-generator",
+		dir = vim.fn.stdpath("config"),
+		lazy = true,
+		cmd = {
+			"CommitGeneratorLogin",
+			"CommitGeneratorStatus",
+			"CommitGeneratorLogout",
+			"GenerateCommitMsg",
+		},
+		ft = "gitcommit",
+		config = function()
+			require("commit-generator").setup({
+				ai = {
+					enabled = true,
+					model = "gpt-5.6-luna",
+					timeout = 30000,
+					storage = {
+						backend = "auto",
+					},
+				},
+				format = {
+					conventional_commits = true,
+					max_length = 50,
+					include_scope = true,
+				},
+			})
+		end,
+	},
+	{
 		--- Awesome git interface
 		"NeogitOrg/neogit",
 		lazy = true,
@@ -17,22 +47,6 @@ return {
 					show_staged_diff = true,
 					staged_diff_split_kind = "split",
 					spell_check = true,
-				},
-			})
-
-			--- Setup commit message generator with custom config
-			require("commit-generator").setup({
-				ai = {
-					enabled = true,
-					provider = "openai-codex",
-					model = "gpt-5.6-luna",
-					thinking = "low",
-					timeout = 30000,
-				},
-				format = {
-					conventional_commits = true,
-					max_length = 50,
-					include_scope = true,
 				},
 			})
 		end,

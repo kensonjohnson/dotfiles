@@ -5,10 +5,14 @@ M.config = {
 	--- AI Configuration
 	ai = {
 		enabled = true,
-		provider = "openai-codex",
 		model = "gpt-5.6-luna",
-		thinking = "low",
+		--- Maximum duration for one commit-generation request in milliseconds.
 		timeout = 30000,
+		--- Device authorization has its own user-facing deadline in milliseconds.
+		login_timeout = 15 * 60 * 1000,
+		storage = {
+			backend = "auto",
+		},
 	},
 
 	--- Fallback behavior
@@ -294,7 +298,72 @@ function M.analyze_changes()
 	return changes
 end
 
---- Generate AI-powered commit message using Pi's authenticated OpenAI Codex provider
+--- Lazily create the standalone direct-Codex client from AI settings.
+--- @return table|nil client
+--- @return table|nil error
+function M.get_codex_client()
+	if M.codex_client then
+		return M.codex_client
+	end
+
+	local ok, codex = pcall(require, "commit-generator.codex")
+	if not ok then
+		return nil, { code = "client-unavailable", message = "direct-Codex client is unavailable" }
+	end
+
+	local storage_ok, storage_module = pcall(require, "commit-generator.codex.storage")
+	if not storage_ok then
+		return nil, { code = "storage-unavailable", message = "direct-Codex credential storage is unavailable" }
+	end
+
+	local created, client = pcall(function()
+		return codex.new({
+			model = M.config.ai.model,
+			storage = storage_module.new(M.config.ai.storage),
+		})
+	end)
+	if not created then
+		return nil, { code = "client-unavailable", message = "direct-Codex client could not be configured" }
+	end
+
+	M.codex_client = client
+	return client
+end
+
+--- Report a concise direct-Codex failure without exposing request details.
+--- @param action string User-visible action
+--- @param error table|nil Client error
+function M.notify_codex_error(action, error)
+	local code = type(error) == "table" and error.code or nil
+	local message = type(error) == "table" and error.message or nil
+	local detail = type(message) == "string" and message ~= "" and message or "unknown error"
+	if type(code) == "string" and code ~= "" then
+		detail = "[" .. code .. "] " .. detail
+	end
+	vim.notify("Direct Codex " .. action .. " failed: " .. detail, vim.log.levels.ERROR)
+end
+
+--- Dispatch a prompt to the standalone direct-Codex client.
+--- @param prompt string The prompt to send
+--- @return string|nil Generated commit message
+--- @return table|nil error
+function M.call_codex_client(prompt)
+	local client, client_error = M.get_codex_client()
+	if not client then
+		M.notify_codex_error("generation", client_error)
+		return nil, client_error
+	end
+
+	local message, generation_error = client:generate(prompt, { timeout_ms = M.config.ai.timeout })
+	if not message then
+		M.notify_codex_error("generation", generation_error)
+		return nil, generation_error
+	end
+
+	return M.clean_ai_message(message)
+end
+
+--- Generate an AI-powered commit message with standalone direct Codex.
 --- @param changes table The changes from analyze_changes()
 --- @param repo_context table Repository context
 --- @param title_only boolean Whether to generate only the subject line
@@ -304,13 +373,8 @@ function M.generate_ai_message(changes, repo_context, title_only)
 		return nil
 	end
 
-	if vim.fn.executable("pi") ~= 1 then
-		vim.notify("Pi is not installed or not available in PATH", vim.log.levels.WARN)
-		return nil
-	end
-
 	local prompt = M.build_ai_prompt(changes, repo_context, title_only)
-	return M.call_pi(prompt)
+	return M.call_codex_client(prompt)
 end
 
 --- Build intelligent prompt for AI commit message generation
@@ -414,49 +478,8 @@ function M.build_ai_prompt(changes, repo_context, title_only)
 	return prompt
 end
 
---- Run Pi in isolated print mode to generate a commit message
---- @param prompt string The prompt to send
---- @return string|nil Generated commit message or nil if failed
-function M.call_pi(prompt)
-	local pi_cmd = {
-		"pi",
-		"--print",
-		"--no-session",
-		"--no-tools",
-		"--no-extensions",
-		"--no-skills",
-		"--no-prompt-templates",
-		"--no-context-files",
-		"--provider",
-		M.config.ai.provider,
-		"--model",
-		M.config.ai.model,
-		"--thinking",
-		M.config.ai.thinking,
-		"--system-prompt",
-		"Generate only the requested git commit message. Do not use tools or add commentary.",
-	}
-
-	local result = vim.system(pi_cmd, {
-		stdin = prompt,
-		text = true,
-		timeout = M.config.ai.timeout,
-	}):wait()
-
-	if result.code ~= 0 then
-		local error_message = vim.trim(result.stderr or "")
-		if error_message == "" then
-			error_message = "unknown error"
-		end
-		vim.notify("Pi commit generation failed: " .. error_message, vim.log.levels.ERROR)
-		return nil
-	end
-
-	return M.clean_ai_message(result.stdout)
-end
-
---- Normalize Pi's text output into a commit message
---- @param message string|nil Pi output
+--- Normalize direct-Codex text output into a commit message
+--- @param message string|nil Direct-Codex output
 --- @return string|nil Commit message or nil if empty
 function M.clean_ai_message(message)
 	if not message or message == "" then
@@ -550,7 +573,7 @@ function M.generate_message(changes, force_method, title_only)
 
 		--- If AI was specifically requested but failed, notify user
 		if force_method == "ai" then
-			vim.notify("AI generation failed, no fallback available", vim.log.levels.ERROR)
+			vim.notify("Direct Codex generation failed, no fallback available", vim.log.levels.ERROR)
 			return "chore: update files"
 		end
 	end
@@ -796,12 +819,69 @@ function M.extract_plugin_name(filepath)
 	return "plugin"
 end
 
+--- Start direct-Codex device authorization.
+function M.login_codex()
+	local client, client_error = M.get_codex_client()
+	if not client then
+		M.notify_codex_error("login", client_error)
+		return
+	end
+
+	client:login_async({ timeout_ms = M.config.ai.login_timeout }, function(logged_in, login_error)
+		if not logged_in then
+			M.notify_codex_error("login", login_error)
+			return
+		end
+		vim.notify("Direct Codex login completed", vim.log.levels.INFO)
+	end)
+end
+
+--- Report non-secret standalone direct-Codex client state.
+function M.status_codex()
+	local client, client_error = M.get_codex_client()
+	if not client then
+		M.notify_codex_error("status", client_error)
+		return
+	end
+
+	local ok, status = pcall(client.status, client)
+	if not ok or type(status) ~= "table" then
+		M.notify_codex_error("status", { code = "status-failed", message = "direct-Codex status could not be read" })
+		return
+	end
+
+	local backend = type(status.backend) == "string" and status.backend or "unknown"
+	local credential_state = type(status.credential_state) == "string" and status.credential_state or "unknown"
+	local bridge = status.bridge_installed == true and "installed" or "not installed"
+	vim.notify(
+		"Direct Codex: " .. backend .. "; credential " .. credential_state .. "; bridge " .. bridge .. "; model " .. M.config.ai.model,
+		vim.log.levels.INFO
+	)
+end
+
+--- Remove only the standalone direct-Codex credential.
+function M.logout_codex()
+	local client, client_error = M.get_codex_client()
+	if not client then
+		M.notify_codex_error("logout", client_error)
+		return
+	end
+
+	local logged_out, logout_error = client:logout()
+	if not logged_out then
+		M.notify_codex_error("logout", logout_error)
+		return
+	end
+	vim.notify("Direct Codex credential removed", vim.log.levels.INFO)
+end
+
 --- Setup commands and keymaps
 function M.setup(user_config)
 	--- Merge user configuration with defaults
 	if user_config then
 		M.config = vim.tbl_deep_extend("force", M.config, user_config)
 	end
+	M.codex_client = nil
 
 	--- Create the GenerateCommitMsg command
 	vim.api.nvim_create_user_command("GenerateCommitMsg", function(opts)
@@ -856,6 +936,16 @@ function M.setup(user_config)
 			return { "--insert", "--preview", "--ai-only", "--rules", "--generic", "--title-only" }
 		end,
 		desc = "Generate commit message based on staged changes",
+	})
+
+	vim.api.nvim_create_user_command("CommitGeneratorLogin", M.login_codex, {
+		desc = "Log in to standalone direct Codex",
+	})
+	vim.api.nvim_create_user_command("CommitGeneratorStatus", M.status_codex, {
+		desc = "Show standalone direct Codex status",
+	})
+	vim.api.nvim_create_user_command("CommitGeneratorLogout", M.logout_codex, {
+		desc = "Remove standalone direct Codex credential",
 	})
 
 	--- Set up buffer-local keymaps for git commit buffers

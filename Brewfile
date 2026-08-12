@@ -107,6 +107,8 @@ brew "sqlfmt"
 brew "stripe-cli"
 # Utility-first CSS framework
 brew "tailwindcss"
+# CLI for organizing Tailwind CSS classes
+brew "rustywind"
 # Terminal multiplexer
 brew "tmux"
 # Parser generator tool
