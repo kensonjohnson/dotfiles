@@ -9,3 +9,6 @@ Brewfile.lock.json
 
 # Neovim spell files (generated)
 nvim/spell/
+
+# Temp files
+tmp/
