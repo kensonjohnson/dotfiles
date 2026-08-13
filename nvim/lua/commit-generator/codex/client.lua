@@ -84,9 +84,11 @@ function M.new(opts)
   end
   local device_login_ui = opts.device_login_ui or require("commit-generator.codex.device_login")
   local model = opts.model or protocol.default_model
+  local reasoning = opts.reasoning or "low"
   -- Device authorization waits for user interaction, unlike a generation request.
   local login_timeout_ms = opts.login_timeout_ms or opts.device_timeout_ms or 15 * 60 * 1000
   assert(type(model) == "string" and model ~= "", "model must be a non-empty string")
+  assert(protocol.is_reasoning_effort(reasoning), "reasoning must be none, minimal, low, medium, high, xhigh, or max")
 
   local function run_prepared(prepared, options, runner)
     if is_cancelled(options) then
@@ -262,7 +264,7 @@ function M.new(opts)
     return refreshed
   end
 
-  local client = { storage = storage, model = model }
+  local client = { storage = storage, model = model, reasoning = reasoning }
 
   local function close_login_ui(handle)
     if type(handle) == "function" then
@@ -611,7 +613,7 @@ function M.new(opts)
     if not request_options then
       return nil, error("timeout", "Codex generation timed out")
     end
-    local body, status, reason = run_curl(protocol.build_curl_command(protocol.build_request(prompt, options.model or model), refreshed), request_options)
+    local body, status, reason = run_curl(protocol.build_curl_command(protocol.build_request(prompt, options.model or model, reasoning), refreshed), request_options)
     if not body then
       return nil, public_transport_error("Codex generation", reason)
     end

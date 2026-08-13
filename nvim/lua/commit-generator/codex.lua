@@ -8,7 +8,7 @@ local client = require("commit-generator.codex.client")
 local M = {}
 
 --- Create an independently authenticated direct-Codex client.
---- @param opts? table {model?: string, storage?: table, system?: function}
+--- @param opts? table {model?: string, reasoning?: string, storage?: table, system?: function}
 --- @return table client login/status/logout/generate methods
 function M.new(opts)
   return client.new(opts)

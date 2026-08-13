@@ -42,9 +42,11 @@ package.loaded["commit-generator.codex.storage"] = {
 
 local generator = require("commit-generator")
 assert_true(generator.config.ai.login_timeout == 15 * 60 * 1000, "device login default must be fifteen minutes")
+assert_true(generator.config.ai.reasoning == "low", "direct Codex reasoning must default to low")
 generator.setup({
   ai = {
     model = "test-codex-model",
+    reasoning = "low",
     timeout = 1234,
     login_timeout = 5678,
     storage = { backend = "auto" },
@@ -60,6 +62,7 @@ local context = { conventional_commits = true, has_tests = false }
 assert_true(generator.generate_ai_message(changes, context, true) == "fix: use direct Codex")
 assert_true(factory_calls == 1, "direct client should be created on first generation")
 assert_true(client_options.model == "test-codex-model")
+assert_true(client_options.reasoning == "low")
 assert_true(storage_options.backend == "auto")
 assert_true(generation_options[1].timeout_ms == 1234)
 assert_true(generated_prompts[1]:find("Return only the subject line", 1, true))

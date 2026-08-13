@@ -16,6 +16,7 @@ return {
 				ai = {
 					enabled = true,
 					model = "gpt-5.6-luna",
+					reasoning = "none",
 					timeout = 30000,
 					storage = {
 						backend = "auto",

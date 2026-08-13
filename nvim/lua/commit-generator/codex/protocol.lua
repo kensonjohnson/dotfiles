@@ -9,6 +9,15 @@ M.device_verification_url = M.auth_base_url .. "/codex/device"
 M.device_redirect_uri = M.auth_base_url .. "/deviceauth/callback"
 M.oauth_client_id = "app_EMoamEEZ73f0CkXaXp7hrann"
 M.default_model = "gpt-5.6-luna"
+M.reasoning_efforts = {
+  none = true,
+  minimal = true,
+  low = true,
+  medium = true,
+  high = true,
+  xhigh = true,
+  max = true,
+}
 -- The Codex backend currently expects the same originator as Pi's installed
 -- openai-codex SSE adapter; this names the protocol client, not an executable.
 M.originator = "pi"
@@ -41,30 +50,39 @@ local function form_encode(fields)
   return table.concat(values, "&")
 end
 
-function M.build_request(prompt, model)
-  assert(type(prompt) == "string" and prompt ~= "", "prompt must be a non-empty string")
+function M.is_reasoning_effort(value)
+  return type(value) == "string" and M.reasoning_efforts[value] == true
+end
 
-  return {
-    url = M.codex_url,
-    body = {
-      model = model or M.default_model,
-      store = false,
-      stream = true,
-      instructions = "Return one concise conventional commit message and nothing else.",
-      input = {
-        {
-          role = "user",
-          content = {
-            { type = "input_text", text = prompt },
-          },
+function M.build_request(prompt, model, reasoning_effort)
+  assert(type(prompt) == "string" and prompt ~= "", "prompt must be a non-empty string")
+  reasoning_effort = reasoning_effort or "low"
+  assert(M.is_reasoning_effort(reasoning_effort), "reasoning effort must be none, minimal, low, medium, high, xhigh, or max")
+
+  local body = {
+    model = model or M.default_model,
+    store = false,
+    stream = true,
+    instructions = "Return one concise conventional commit message and nothing else.",
+    input = {
+      {
+        role = "user",
+        content = {
+          { type = "input_text", text = prompt },
         },
       },
-      text = { verbosity = "low" },
-      include = { "reasoning.encrypted_content" },
-      tool_choice = "auto",
-      parallel_tool_calls = true,
     },
+    text = { verbosity = "low" },
+    include = { "reasoning.encrypted_content" },
+    tool_choice = "auto",
+    parallel_tool_calls = true,
+    reasoning = { effort = reasoning_effort },
   }
+  if reasoning_effort ~= "none" then
+    body.reasoning.summary = "auto"
+  end
+
+  return { url = M.codex_url, body = body }
 end
 
 function M.build_curl_config(request, credential)

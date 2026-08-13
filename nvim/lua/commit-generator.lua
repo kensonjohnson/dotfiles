@@ -6,6 +6,8 @@ M.config = {
 	ai = {
 		enabled = true,
 		model = "gpt-5.6-luna",
+		--- OpenAI API reasoning effort.
+		reasoning = "low",
 		--- Maximum duration for one commit-generation request in milliseconds.
 		timeout = 30000,
 		--- Device authorization has its own user-facing deadline in milliseconds.
@@ -319,6 +321,7 @@ function M.get_codex_client()
 	local created, client = pcall(function()
 		return codex.new({
 			model = M.config.ai.model,
+			reasoning = M.config.ai.reasoning,
 			storage = storage_module.new(M.config.ai.storage),
 		})
 	end)

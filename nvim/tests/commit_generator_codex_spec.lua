@@ -74,7 +74,14 @@ login_handle.close()
 assert_true(ui_closes == 1, "device login close handle is idempotent")
 
 local credential = { access = "test-access-token", account_id = "test-account" }
-local prepared = protocol.build_curl_command(protocol.build_request("Summarize staged changes."), credential)
+local low_request = protocol.build_request("Summarize staged changes.", nil, "low")
+assert_true(low_request.body.reasoning.effort == "low" and low_request.body.reasoning.summary == "auto", "low reasoning must be sent")
+local none_request = protocol.build_request("Summarize staged changes.", nil, "none")
+assert_true(none_request.body.reasoning ~= nil, "none reasoning must never be omitted")
+assert_true(none_request.body.reasoning.effort == "none" and none_request.body.reasoning.summary == nil, "none must send without a summary")
+assert_true(not pcall(protocol.build_request, "Summarize staged changes.", nil, "off"), "legacy off must not be a config alias")
+assert_true(not pcall(protocol.build_request, "Summarize staged changes.", nil, "unsupported"), "reasoning effort must be validated")
+local prepared = protocol.build_curl_command(low_request, credential)
 assert_true(prepared.argv[1] == "curl")
 assert_true(not table.concat(prepared.argv, " "):find(credential.access, 1, true), "access token leaked to argv")
 assert_true(prepared.stdin:find(credential.access, 1, true), "access token must use curl stdin")
@@ -157,6 +164,10 @@ local function memory_storage(initial)
     end,
   }
 end
+
+assert_true(codex.new({ storage = memory_storage(), reasoning = "none" }).reasoning == "none", "client must accept API none")
+assert_true(not pcall(codex.new, { reasoning = "off" }), "client must reject legacy off")
+assert_true(not pcall(codex.new, { reasoning = "unsupported" }), "client reasoning must be validated")
 
 local original = vim.json.encode({
   access = jwt("old-account"),
