@@ -49,6 +49,7 @@ commit_generator.config()
 assert_true(commit_generator_setup == 1)
 assert_true(configured_generator.ai.model == "gpt-5.6-luna")
 assert_true(configured_generator.ai.reasoning == "none")
+assert_true(configured_generator.ai.timeout == 10000, "generation timeout must favor low latency")
 assert_true(configured_generator.ai.storage.backend == "auto")
 assert_true(configured_generator.format.conventional_commits == true)
 
