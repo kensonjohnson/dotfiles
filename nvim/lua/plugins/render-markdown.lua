@@ -6,7 +6,7 @@ return {
 	opts = {
 		dash = { width = 80 },
 		code = {
-			disable_background = { "diff", "dynomark" },
+			disable_background = { "diff" },
 			language_border = " ",
 			language_left = "█",
 			language_right = "",
