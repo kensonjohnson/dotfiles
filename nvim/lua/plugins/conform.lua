@@ -39,6 +39,9 @@ return {
 				}
 			end,
 			formatters = {
+				pg_format = {
+					append_args = { "--no-space-function" },
+				},
 				rustywind = {
 					append_args = { "--stdin-filename", "$FILENAME" },
 				},
